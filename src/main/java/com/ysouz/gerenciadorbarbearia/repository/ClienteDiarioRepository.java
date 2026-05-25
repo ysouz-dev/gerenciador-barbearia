@@ -8,4 +8,7 @@ import java.util.ArrayList;
 public class ClienteDiarioRepository {
     private ArrayList<Pessoa> listaPessoas;
 
+    public void salvar(ClienteDiario cliente) {
+        this.listaPessoas.add(cliente);
+    }
 }
