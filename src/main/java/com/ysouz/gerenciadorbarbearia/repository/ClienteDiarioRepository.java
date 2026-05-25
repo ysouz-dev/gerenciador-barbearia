@@ -3,6 +3,7 @@ package com.ysouz.gerenciadorbarbearia.repository;
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
 import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 
@@ -25,8 +26,12 @@ public class ClienteDiarioRepository {
         throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf.");
     }
 
-    public ArrayList<Pessoa> listarPessoas() {
+    public ArrayList<Pessoa> listaDePessoas() {
         return new ArrayList<Pessoa>(this.listaPessoas.values());
+    }
+
+    public HashMap<String, Pessoa> getLista() {
+        return new HashMap<String, Pessoa>(this.listaPessoas);
     }
 
     public static boolean containsPessoa(Pessoa pessoa, Map<String, Pessoa> lista) {
