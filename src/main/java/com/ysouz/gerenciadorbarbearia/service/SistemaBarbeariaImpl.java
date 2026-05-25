@@ -2,16 +2,18 @@ package com.ysouz.gerenciadorbarbearia.service;
 
 import com.ysouz.gerenciadorbarbearia.model.*;
 import com.ysouz.gerenciadorbarbearia.util.Formatador;
+import com.ysouz.gerenciadorbarbearia.repository.ClienteDiarioRepository;
+
 import java.util.ArrayList;
 import java.math.BigDecimal;
 
 public final class SistemaBarbeariaImpl implements SistemaBarbearia {
-    private ArrayList<Pessoa> listaPessoas;
+    private ClienteDiarioRepository listaClientes;
     private ArrayList<Atendimento> listaAtendimentos;
     private BigDecimal totalFaturado;
 
     public SistemaBarbeariaImpl() {
-        this.listaPessoas = new ArrayList<Pessoa>();
+        this.listaClientes = new ClienteDiarioRepository();
         this.listaAtendimentos = new ArrayList<Atendimento>();
         this.totalFaturado = BigDecimal.ZERO;
     }
