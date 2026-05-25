@@ -29,5 +29,11 @@ public class ClienteDiarioRepository {
         return new ArrayList<Pessoa>(this.listaPessoas.values());
     }
 
+    public static boolean containsPessoa(Pessoa pessoa, Map<String, Pessoa> lista) {
+        if (!lista.containsValue(pessoa)) {
+            return false;
+        }
+        return true;
+    }
 
 }
