@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class ClienteDiarioRepository {
     private Map<String, Pessoa> listaPessoas;
 
-    public void salvar(ClienteDiario cliente) {
-        this.listaPessoas.put(cliente.getCPF(), cliente);
+    public void salvar(Pessoa pessoa) {
+        this.listaPessoas.put(pessoa.getCPF(), pessoa);
     }
 
     public void remover(String cpf) {
