@@ -12,6 +12,11 @@ public class ClienteDiarioRepository {
         this.listaPessoas.add(cliente);
     }
 
+    public void remover(String cpf) {
+        Pessoa c = buscaPorCpf(cpf);
+        this.listaPessoas.remove(c);
+    }
+
     public Pessoa buscaPorCpf(String cpf) {
         for (Pessoa pessoa : this.listaPessoas) {
             if (pessoa.getCPF().equals(cpf)) {
