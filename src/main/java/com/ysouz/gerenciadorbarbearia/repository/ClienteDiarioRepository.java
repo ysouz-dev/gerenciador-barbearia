@@ -11,4 +11,15 @@ public class ClienteDiarioRepository {
     public void salvar(ClienteDiario cliente) {
         this.listaPessoas.add(cliente);
     }
+
+    public Pessoa buscaPorCpf(String cpf) {
+        for (Pessoa pessoa : this.listaPessoas) {
+            if (pessoa.getCPF().equals(cpf)) {
+                return pessoa;
+            }
+        }
+        throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf.");
+    }
+
+
 }
