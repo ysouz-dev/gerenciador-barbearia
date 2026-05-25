@@ -18,15 +18,6 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         this.totalFaturado = BigDecimal.ZERO;
     }
 
-    public Pessoa findPessoa(String cpf) {
-        for (Pessoa people : this.listaPessoas) {
-            if (people.getCPF().equals(cpf)) {
-                return people;
-            }
-        }
-        throw new IllegalArgumentException("Esse CPF não está cadastrado no sistema.");
-    }
-
     public Atendimento findAtendimento(String id) {
         for (Atendimento atendimento : this.listaAtendimentos) {
             if (atendimento.getId().equals(id)) {
@@ -38,10 +29,10 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void cadastrarCliente(Pessoa pessoa) {
-        if (containsPessoa(this.listaPessoas, pessoa)) {
-            throw new IllegalArgumentException("O sistema já possui um cliente cadastrado com esse cpf.");
+        if (ClienteDiarioRepository.containsPessoa(pessoa, this.listaClientes.getLista())) {
+            throw new IllegalArgumentException("O sistema já possui esse cliente cadastrado");
         }
-        listaPessoas.add(pessoa);
+        this.listaClientes.salvar(pessoa);
     }
 
     @Override
@@ -99,15 +90,6 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         System.out.println("Total de clientes: " + this.listaPessoas.size());
         System.out.println("Total de Atendimentos: " + this.listaAtendimentos.size());
         System.out.println("Total faturado: R$ %.2f".formatted(this.totalFaturado));
-    }
-
-    private static boolean containsPessoa(ArrayList<Pessoa> lista, Pessoa pessoa) {
-        for (Pessoa people : lista) {
-            if (pessoa.getCPF().equals(people.getCPF())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static boolean containsAtendimento(ArrayList<Atendimento> lista, Atendimento atendimento) {
