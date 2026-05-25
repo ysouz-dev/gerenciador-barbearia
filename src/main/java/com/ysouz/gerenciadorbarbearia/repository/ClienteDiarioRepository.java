@@ -26,5 +26,9 @@ public class ClienteDiarioRepository {
         throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf.");
     }
 
+    public ArrayList<Pessoa> listarPessoas() {
+        return new ArrayList<Pessoa>(this.listaPessoas);
+    }
+
 
 }
