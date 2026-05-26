@@ -67,10 +67,10 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void removerCliente(Pessoa pessoa) {
-        if (!containsPessoa(this.listaPessoas, pessoa)) {
+        if (!ClienteDiarioRepository.containsPessoa(pessoa, this.listaClientes.getLista())) {
             throw new IllegalArgumentException("Cliente não está cadastrado no sistema.");
         }
-        this.listaPessoas.remove(pessoa);
+        this.listaClientes.remover(pessoa.getCPF());
     }
 
     @Override
