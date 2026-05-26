@@ -22,4 +22,11 @@ public class AtendimentoRepository {
         }
         throw new IllegalArgumentException("Nenhum atendimento encontrado com esse id");
     }
+
+    public static boolean containsAtendimento(Atendimento atendimento, Map<Integer, Atendimento> lista) {
+        if (lista.containsValue(atendimento)) {
+            return true;
+        }
+        return false;
+    }
 }
