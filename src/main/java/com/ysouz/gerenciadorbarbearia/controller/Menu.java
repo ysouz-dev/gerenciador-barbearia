@@ -230,7 +230,7 @@ public final class Menu {
         // verifica se existe cliente com esse cpf no sistema
         Pessoa cliente;
         try {
-            cliente = this.sistema.findPessoa(cpf);
+            cliente = this.sistema.buscaClientePorCpf(cpf);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return;
