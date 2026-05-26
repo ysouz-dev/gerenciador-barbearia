@@ -3,18 +3,19 @@ package com.ysouz.gerenciadorbarbearia.service;
 import com.ysouz.gerenciadorbarbearia.model.*;
 import com.ysouz.gerenciadorbarbearia.util.Formatador;
 import com.ysouz.gerenciadorbarbearia.repository.ClienteDiarioRepository;
+import com.ysouz.gerenciadorbarbearia.repository.AtendimentoRepository;
 
 import java.util.ArrayList;
 import java.math.BigDecimal;
 
 public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     private ClienteDiarioRepository listaClientes;
-    private ArrayList<Atendimento> listaAtendimentos;
+    private AtendimentoRepository listaAtendimentos;
     private BigDecimal totalFaturado;
 
     public SistemaBarbeariaImpl() {
         this.listaClientes = new ClienteDiarioRepository();
-        this.listaAtendimentos = new ArrayList<Atendimento>();
+        this.listaAtendimentos = new AtendimentoRepository();
         this.totalFaturado = BigDecimal.ZERO;
     }
 
@@ -28,11 +29,11 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void cadastrarAtendimento(Atendimento atendimento) {
-        if (containsAtendimento(this.listaAtendimentos, atendimento)) {
+        if (AtendimentoRepository.containsAtendimento(atendimento, this.listaAtendimentos.getLista())) {
             throw new IllegalArgumentException("O sistema já possui esse atendimento cadastrado.");
         }
         this.totalFaturado = this.totalFaturado.add(atendimento.getTotal());
-        listaAtendimentos.add(atendimento);
+        this.listaAtendimentos.salvar(atendimento);
     }
 
     @Override
