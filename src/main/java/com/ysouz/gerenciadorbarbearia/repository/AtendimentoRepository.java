@@ -9,6 +9,10 @@ import java.util.ArrayList;
 public class AtendimentoRepository {
     private Map<Integer, Atendimento> listaAtendimento;
 
+    public AtendimentoRepository() {
+        this.listaAtendimento = new HashMap<>();
+    }
+
     public void salvar(Atendimento atendimento) {
         this.listaAtendimento.put(atendimento.getId(), atendimento);
     }

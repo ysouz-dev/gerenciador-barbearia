@@ -9,6 +9,10 @@ import java.util.ArrayList;
 public class ClienteDiarioRepository {
     private Map<String, Pessoa> listaPessoas;
 
+    public ClienteDiarioRepository() {
+        this.listaPessoas = new HashMap<>();
+    }
+
     public void salvar(Pessoa pessoa) {
         this.listaPessoas.put(pessoa.getCPF(), pessoa);
     }
