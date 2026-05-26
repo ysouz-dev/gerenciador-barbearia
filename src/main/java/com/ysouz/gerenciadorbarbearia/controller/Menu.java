@@ -281,7 +281,7 @@ public final class Menu {
 
     public void estatisticas() {
         Formatador.tituloDinamico("Estatísticas", 8);
-        this.sistema.estatisticas();
+        System.out.println(this.sistema.estatisticas());
     }
 
     public void encerrarSistema() {
