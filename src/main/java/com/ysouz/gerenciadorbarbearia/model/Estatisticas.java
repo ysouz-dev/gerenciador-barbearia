@@ -33,14 +33,14 @@ public class Estatisticas {
         if (valor.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Valor a ser adicionado no faturamento inválido.");
         }
-        this.totalFaturado.add(valor);
+        this.totalFaturado = this.totalFaturado.add(valor);
     }
 
     public void removerValorFaturado(BigDecimal valor) {
         if (valor.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Valor a ser removido do faturamento inválido");
         }
-        this.totalFaturado.subtract(valor);
+        this.totalFaturado = this.totalFaturado.subtract(valor);
     }
 
     public int getTotalClientes() {
@@ -50,6 +50,7 @@ public class Estatisticas {
     public int getTotalAtendimentos() {
         return this.totalAtendimentos;
     }
+
     public BigDecimal getTotalFaturado() {
         return this.totalFaturado;
     }
