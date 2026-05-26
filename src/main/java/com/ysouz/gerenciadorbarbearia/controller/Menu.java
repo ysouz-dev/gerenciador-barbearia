@@ -249,11 +249,11 @@ public final class Menu {
         Formatador.tituloDinamico("Remover Atendimento", 4);
 
         // leitura e validacao do id
-        String id;
+        Integer id;
         while (true) {
             try {
                 System.out.print("Digite o id do atendimento: ");
-                id = this.scanner.nextLine();
+                id = this.scanner.nextInt();
                 Validador.validaId(id);
                 break;
 
@@ -265,7 +265,7 @@ public final class Menu {
         // procura o atendimento de acordo com o id
         Atendimento atendimento;
         try {
-            atendimento = this.sistema.findAtendimento(id);
+            atendimento = this.sistema.buscaAtendimentoPorId(id);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return;
