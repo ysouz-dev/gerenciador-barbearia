@@ -197,7 +197,10 @@ public final class Menu {
 
     public void listarClientes() {
         try {
-            System.out.println(this.sistema.listarClientes());
+            for (Pessoa cliente : this.sistema.listarClientes()) {
+                System.out.println(cliente.resumo());
+                Formatador.linha();
+            }
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
         }
@@ -205,7 +208,10 @@ public final class Menu {
 
     public void listarAtendimentos() {
         try {
-            System.out.println(this.sistema.listarAtendimentos());
+            for (Atendimento atendimento : this.sistema.listarAtendimentos()) {
+                System.out.println(atendimento.resumo());
+                Formatador.linha();
+            }
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
         }
