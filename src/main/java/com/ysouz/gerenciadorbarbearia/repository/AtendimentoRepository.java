@@ -2,6 +2,7 @@ package com.ysouz.gerenciadorbarbearia.repository;
 
 import com.ysouz.gerenciadorbarbearia.model.Atendimento;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class AtendimentoRepository {
@@ -21,6 +22,10 @@ public class AtendimentoRepository {
             return this.listaAtendimento.get(id);
         }
         throw new IllegalArgumentException("Nenhum atendimento encontrado com esse id");
+    }
+
+    public HashMap<Integer, Atendimento> getLista() {
+        return new HashMap<Integer, Atendimento>(this.listaAtendimento);
     }
 
     public static boolean containsAtendimento(Atendimento atendimento, Map<Integer, Atendimento> lista) {
