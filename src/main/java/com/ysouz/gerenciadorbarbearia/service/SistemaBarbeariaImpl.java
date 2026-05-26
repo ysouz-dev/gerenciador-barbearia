@@ -74,9 +74,9 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     }
 
     @Override
-    public void estatisticas() {
-        System.out.println("Total de clientes: " + this.listaPessoas.size());
-        System.out.println("Total de Atendimentos: " + this.listaAtendimentos.size());
-        System.out.println("Total faturado: R$ %.2f".formatted(this.totalFaturado));
+    public String estatisticas() {
+        return "Total de clientes: " + this.estatisticas.getTotalClientes() +
+                "\nTotal de Atendimentos: " + this.estatisticas.getTotalAtendimentos() +
+                "\nTotal faturado: R$ " + this.estatisticas.getTotalFaturado();
     }
 }
