@@ -4,6 +4,7 @@ import com.ysouz.gerenciadorbarbearia.model.Atendimento;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 public class AtendimentoRepository {
     private Map<Integer, Atendimento> listaAtendimento;
@@ -22,6 +23,10 @@ public class AtendimentoRepository {
             return this.listaAtendimento.get(id);
         }
         throw new IllegalArgumentException("Nenhum atendimento encontrado com esse id");
+    }
+
+    public ArrayList<Atendimento> listaDeAtendimento() {
+        return new ArrayList<Atendimento>(this.listaAtendimento.values());
     }
 
     public HashMap<Integer, Atendimento> getLista() {
