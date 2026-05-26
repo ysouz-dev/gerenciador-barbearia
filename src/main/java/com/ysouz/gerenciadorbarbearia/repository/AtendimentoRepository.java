@@ -11,6 +11,11 @@ public class AtendimentoRepository {
         this.listaAtendimento.put(atendimento.getId(), atendimento);
     }
 
+    public void remover(Integer id) {
+        Atendimento atend = buscaPorId(id);
+        this.listaAtendimento.remove(id, atend);
+    }
+
     public Atendimento buscaPorId(Integer id) {
         if (this.listaAtendimento.containsKey(id)) {
             return this.listaAtendimento.get(id);
