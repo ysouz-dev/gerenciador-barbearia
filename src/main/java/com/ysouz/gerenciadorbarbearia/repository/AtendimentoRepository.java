@@ -30,7 +30,7 @@ public class AtendimentoRepository {
     }
 
     public boolean containsAtendimento(Atendimento atendimento) {
-        if (this.listaAtendimento.containsValue(atendimento)) {
+        if (this.listaAtendimento.containsKey(atendimento.getId())) {
             return true;
         }
         return false;

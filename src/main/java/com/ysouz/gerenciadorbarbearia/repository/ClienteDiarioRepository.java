@@ -30,7 +30,7 @@ public class ClienteDiarioRepository {
     }
 
     public boolean containsPessoa(Pessoa pessoa) {
-        if (!this.listaPessoas.containsValue(pessoa)) {
+        if (!this.listaPessoas.containsKey(pessoa.getCPF())) {
             return false;
         }
         return true;
