@@ -1,7 +1,6 @@
 package com.ysouz.gerenciadorbarbearia.model;
 
 import java.util.ArrayList;
-import com.ysouz.gerenciadorbarbearia.util.Formatador;
 import java.math.BigDecimal;
 
 public class Atendimento {
@@ -63,15 +62,16 @@ public class Atendimento {
         servicosRealizados.add(servico);
     }
 
-    public void resumo() {
-        System.out.println("ID: " + this.id);
-        System.out.println("Cliente: " + this.cliente.getNome());
-        System.out.println("Serviços:");
-        for (Servico service : this.servicosRealizados) {
-            System.out.println(service + " R$ %.2f".formatted(service.getValor()));
+    public String resumo() {
+        StringBuilder resumo = new StringBuilder();
+        resumo.append("ID: ").append(this.id);
+        resumo.append("\nNome: ").append(this.cliente.getNome());
+        resumo.append("\nServiços: \n");
+        for (Servico servico : this.servicosRealizados) {
+            resumo.append(servico).append(" R$ ").append(servico.getValor()).append("\n");
         }
-        System.out.println("Total serviço: R$ %.2f".formatted(this.totalServico));
-        Formatador.linha();
+        resumo.append("Total do atendimento: ").append("R$ ").append(this.totalServico);
+        return resumo.toString();
     }
 
     public Pessoa getPessoa() {
