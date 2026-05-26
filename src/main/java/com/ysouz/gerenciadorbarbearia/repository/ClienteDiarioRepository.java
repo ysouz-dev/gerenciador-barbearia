@@ -1,7 +1,6 @@
 package com.ysouz.gerenciadorbarbearia.repository;
 
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
-import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 
 import java.util.HashMap;
 import java.util.Map;
