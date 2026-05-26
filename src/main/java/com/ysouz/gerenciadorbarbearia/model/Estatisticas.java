@@ -29,4 +29,18 @@ public class Estatisticas {
         this.totalAtendimentos--;
     }
 
+    public void adicionarValorFaturado(BigDecimal valor) {
+        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Valor a ser adicionado no faturamento inválido.");
+        }
+        this.totalFaturado.add(valor);
+    }
+
+    public void removerValorFaturado(BigDecimal valor) {
+        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Valor a ser removido do faturamento inválido");
+        }
+        this.totalFaturado.add(valor);
+    }
+
 }
