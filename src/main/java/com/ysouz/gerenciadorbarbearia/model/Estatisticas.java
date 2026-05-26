@@ -43,4 +43,15 @@ public class Estatisticas {
         this.totalFaturado.subtract(valor);
     }
 
+    public int getTotalClientes() {
+        return this.totalClientes;
+    }
+
+    public int getTotalAtendimentos() {
+        return this.totalAtendimentos;
+    }
+    public BigDecimal getTotalFaturado() {
+        return this.totalFaturado;
+    }
+
 }
