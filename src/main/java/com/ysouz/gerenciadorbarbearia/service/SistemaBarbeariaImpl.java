@@ -11,12 +11,12 @@ import java.math.BigDecimal;
 public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     private ClienteDiarioRepository listaClientes;
     private AtendimentoRepository listaAtendimentos;
-    private BigDecimal totalFaturado;
+    private Estatisticas estatisticas;
 
     public SistemaBarbeariaImpl() {
         this.listaClientes = new ClienteDiarioRepository();
         this.listaAtendimentos = new AtendimentoRepository();
-        this.totalFaturado = BigDecimal.ZERO;
+        this.estatisticas = new Estatisticas();
     }
 
     @Override
@@ -25,6 +25,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
             throw new IllegalArgumentException("O sistema já possui esse cliente cadastrado");
         }
         this.listaClientes.salvar(pessoa);
+        this.estatisticas.incrementarCliente();
     }
 
     @Override
@@ -32,8 +33,9 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         if (this.listaAtendimentos.containsAtendimento(atendimento)) {
             throw new IllegalArgumentException("O sistema já possui esse atendimento cadastrado.");
         }
-        this.totalFaturado = this.totalFaturado.add(atendimento.getTotal());
         this.listaAtendimentos.salvar(atendimento);
+        this.estatisticas.incrementarAtendimento();
+        this.estatisticas.adicionarValorFaturado(atendimento.getTotal());
     }
 
     @Override
@@ -58,6 +60,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
             throw new IllegalArgumentException("Cliente não está cadastrado no sistema.");
         }
         this.listaClientes.remover(pessoa.getCPF());
+        this.estatisticas.decrementarCliente();
     }
 
     @Override
@@ -65,8 +68,9 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         if (!this.listaAtendimentos.containsAtendimento(atendimento)) {
             throw new IllegalArgumentException("Atendimento não está cadastrado no sistema.");
         }
-        this.totalFaturado = this.totalFaturado.subtract(atendimento.getTotal());
         this.listaAtendimentos.remover(atendimento.getId());
+        this.estatisticas.removerValorFaturado(atendimento.getTotal());
+        this.estatisticas.decrementarAtendimento();
     }
 
     @Override
