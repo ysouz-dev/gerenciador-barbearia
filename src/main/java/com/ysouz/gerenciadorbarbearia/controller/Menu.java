@@ -265,6 +265,10 @@ public final class Menu {
 
             } catch (IllegalArgumentException e) {
                 System.out.println("Erro: " + e.getMessage());
+
+            } catch (InputMismatchException e) {
+                System.out.println("Erro: digite apenas números.");
+                this.scanner.nextLine();
             }
         }
 
