@@ -17,5 +17,5 @@ public interface SistemaBarbearia {
 
     public void removerAtendimento(Atendimento atendimento);
 
-    public void estatisticas();
+    public String estatisticas();
 }
