@@ -18,15 +18,6 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         this.totalFaturado = BigDecimal.ZERO;
     }
 
-    public Atendimento findAtendimento(String id) {
-        for (Atendimento atendimento : this.listaAtendimentos) {
-            if (atendimento.getId().equals(id)) {
-                return atendimento;
-            }
-        }
-        throw new IllegalArgumentException("Id de atendimento inexistente ou incorreto.");
-    }
-
     @Override
     public void cadastrarCliente(Pessoa pessoa) {
         if (ClienteDiarioRepository.containsPessoa(pessoa, this.listaClientes.getLista())) {
@@ -87,14 +78,5 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         System.out.println("Total de clientes: " + this.listaPessoas.size());
         System.out.println("Total de Atendimentos: " + this.listaAtendimentos.size());
         System.out.println("Total faturado: R$ %.2f".formatted(this.totalFaturado));
-    }
-
-    private static boolean containsAtendimento(ArrayList<Atendimento> lista, Atendimento atendimento) {
-        for (Atendimento atend : lista) {
-            if (atendimento.getId().equals(atend.getId())) {
-                return true;
-            }
-        }
-        return false;
     }
 }
