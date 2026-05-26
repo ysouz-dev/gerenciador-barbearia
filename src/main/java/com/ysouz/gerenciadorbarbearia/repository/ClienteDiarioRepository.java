@@ -25,19 +25,19 @@ public class ClienteDiarioRepository {
         throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf.");
     }
 
+    public boolean containsPessoa(Pessoa pessoa) {
+        if (!this.listaPessoas.containsValue(pessoa)) {
+            return false;
+        }
+        return true;
+    }
+
     public ArrayList<Pessoa> listaDePessoas() {
         return new ArrayList<Pessoa>(this.listaPessoas.values());
     }
 
     public HashMap<String, Pessoa> getLista() {
         return new HashMap<String, Pessoa>(this.listaPessoas);
-    }
-
-    public static boolean containsPessoa(Pessoa pessoa, Map<String, Pessoa> lista) {
-        if (!lista.containsValue(pessoa)) {
-            return false;
-        }
-        return true;
     }
 
 }

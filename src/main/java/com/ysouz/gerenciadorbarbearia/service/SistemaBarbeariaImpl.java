@@ -21,7 +21,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void cadastrarCliente(Pessoa pessoa) {
-        if (ClienteDiarioRepository.containsPessoa(pessoa, this.listaClientes.getLista())) {
+        if (this.listaClientes.containsPessoa(pessoa)) {
             throw new IllegalArgumentException("O sistema já possui esse cliente cadastrado");
         }
         this.listaClientes.salvar(pessoa);
@@ -29,7 +29,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void cadastrarAtendimento(Atendimento atendimento) {
-        if (AtendimentoRepository.containsAtendimento(atendimento, this.listaAtendimentos.getLista())) {
+        if (this.listaAtendimentos.containsAtendimento(atendimento)) {
             throw new IllegalArgumentException("O sistema já possui esse atendimento cadastrado.");
         }
         this.totalFaturado = this.totalFaturado.add(atendimento.getTotal());
@@ -54,7 +54,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void removerCliente(Pessoa pessoa) {
-        if (!ClienteDiarioRepository.containsPessoa(pessoa, this.listaClientes.getLista())) {
+        if (!this.listaClientes.containsPessoa(pessoa)) {
             throw new IllegalArgumentException("Cliente não está cadastrado no sistema.");
         }
         this.listaClientes.remover(pessoa.getCPF());

@@ -25,6 +25,13 @@ public class AtendimentoRepository {
         throw new IllegalArgumentException("Nenhum atendimento encontrado com esse id");
     }
 
+    public boolean containsAtendimento(Atendimento atendimento) {
+        if (this.listaAtendimento.containsValue(atendimento)) {
+            return true;
+        }
+        return false;
+    }
+
     public ArrayList<Atendimento> listaDeAtendimento() {
         return new ArrayList<Atendimento>(this.listaAtendimento.values());
     }
@@ -33,10 +40,4 @@ public class AtendimentoRepository {
         return new HashMap<Integer, Atendimento>(this.listaAtendimento);
     }
 
-    public static boolean containsAtendimento(Atendimento atendimento, Map<Integer, Atendimento> lista) {
-        if (lista.containsValue(atendimento)) {
-            return true;
-        }
-        return false;
-    }
 }
