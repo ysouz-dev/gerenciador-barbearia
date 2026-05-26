@@ -40,7 +40,7 @@ public class Estatisticas {
         if (valor.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Valor a ser removido do faturamento inválido");
         }
-        this.totalFaturado.add(valor);
+        this.totalFaturado.subtract(valor);
     }
 
 }
