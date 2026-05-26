@@ -78,7 +78,7 @@ public class Atendimento {
         return this.cliente;
     }
 
-    public String getId() {
+    public int getId() {
         return this.id;
     }
 
