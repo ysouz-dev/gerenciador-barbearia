@@ -48,6 +48,9 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         if (atendimento.getServicosRealizados().isEmpty()) {
             throw new IllegalArgumentException("Não é possivel cadastrar um atendimento sem serviços realizados.");
         }
+        if (atendimento.getPessoa() instanceof ClienteDiario) {
+            ((ClienteDiario) atendimento.getPessoa()).aumentarAtendimento();
+        }
         this.listaAtendimentos.salvar(atendimento);
         this.estatisticas.incrementarAtendimento();
         this.estatisticas.adicionarValorFaturado(atendimento.getTotal());
