@@ -40,7 +40,7 @@ public class Atendimento {
 
     private static int idGeral = 1;
 
-    private String id;
+    private int id;
     private ArrayList<Servico> servicosRealizados;
     private BigDecimal totalServico;
     private Pessoa cliente;
@@ -48,7 +48,7 @@ public class Atendimento {
     public Atendimento(Pessoa cliente) {
         this.servicosRealizados = new ArrayList<Servico>();
         this.cliente = cliente;
-        this.id = ("#" + idGeral);
+        this.id = idGeral;
         this.totalServico = BigDecimal.ZERO;
         idGeral++;
     }
