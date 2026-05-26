@@ -38,7 +38,7 @@ public abstract class Validador {
             throw new IllegalArgumentException("O ID não pode ser nulo");
         }
         if (id < 1) {
-            throw new IllegalArgumentException("O ID não pode ser menor ou igual a 1");
+            throw new IllegalArgumentException("O ID não pode ser menor ou igual a ZERO");
         }
     }
 }
