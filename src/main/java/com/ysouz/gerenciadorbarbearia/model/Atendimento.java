@@ -73,6 +73,9 @@ public class Atendimento {
         resumo.append("Total do atendimento: ").append("R$ ").append(this.totalServico);
         return resumo.toString();
     }
+    public ArrayList<Servico> getServicosRealizados() {
+        return new ArrayList<Servico>(this.servicosRealizados);
+    }
 
     public Pessoa getPessoa() {
         return this.cliente;

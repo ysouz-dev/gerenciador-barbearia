@@ -191,8 +191,13 @@ public final class Menu {
         if (atendimento.getPessoa() instanceof ClienteDiario) {
             ((ClienteDiario) atendimento.getPessoa()).aumentarAtendimento();
         }
-        this.sistema.cadastrarAtendimento(atendimento);
-        System.out.println("Atendimento cadastrado!");
+        try {
+            this.sistema.cadastrarAtendimento(atendimento);
+            System.out.println("Atendimento cadastrado!");
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
     }
 
     public void listarClientes() {

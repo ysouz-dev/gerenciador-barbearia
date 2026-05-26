@@ -45,6 +45,9 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         if (this.listaAtendimentos.containsAtendimento(atendimento)) {
             throw new IllegalArgumentException("O sistema já possui esse atendimento cadastrado.");
         }
+        if (atendimento.getServicosRealizados().isEmpty()) {
+            throw new IllegalArgumentException("Não é possivel cadastrar um atendimento sem serviços realizados.");
+        }
         this.listaAtendimentos.salvar(atendimento);
         this.estatisticas.incrementarAtendimento();
         this.estatisticas.adicionarValorFaturado(atendimento.getTotal());
