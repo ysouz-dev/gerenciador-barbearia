@@ -24,6 +24,13 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         return this.listaClientes.buscaPorCpf(cpf);
     }
 
+    public Atendimento buscaAtendimentoPorId(Integer id) {
+        if (!this.listaAtendimentos.getLista().containsKey(id)) {
+            throw new IllegalArgumentException("O sistema não possui um atendimento com esse ID");
+        }
+        return this.listaAtendimentos.buscaPorId(id);
+    }
+
     @Override
     public void cadastrarCliente(Pessoa pessoa) {
         if (this.listaClientes.containsPessoa(pessoa)) {
