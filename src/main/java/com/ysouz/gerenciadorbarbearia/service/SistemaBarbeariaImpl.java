@@ -45,16 +45,11 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     }
 
     @Override
-    public void listarAtendimentos() {
-        if (this.listaAtendimentos.size() == 0) {
+    public ArrayList<Atendimento> listarAtendimentos() {
+        if (this.listaAtendimentos.getLista().isEmpty()) {
             throw new IllegalStateException("Nenhum atendimento cadastrado no sistema.");
         }
-        int contador = 1;
-        for (Atendimento atendimento : this.listaAtendimentos) {
-            System.out.println("N. " + contador);
-            atendimento.resumo();
-            contador++;
-        }
+        return this.listaAtendimentos.listaDeAtendimento();
     }
 
     @Override
