@@ -17,6 +17,13 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         this.estatisticas = new Estatisticas();
     }
 
+    public Pessoa buscaClientePorCpf(String cpf) {
+        if (!this.listaClientes.getLista().containsKey(cpf)) {
+            throw new IllegalArgumentException("O sistema não possui um cliente com cpf");
+        }
+        return this.listaClientes.buscaPorCpf(cpf);
+    }
+
     @Override
     public void cadastrarCliente(Pessoa pessoa) {
         if (this.listaClientes.containsPessoa(pessoa)) {
