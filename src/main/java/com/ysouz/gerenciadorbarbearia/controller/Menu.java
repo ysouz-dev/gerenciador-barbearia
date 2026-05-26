@@ -144,7 +144,7 @@ public final class Menu {
 
         // verifica se existe cliente com esse cpf no sistema
         try {
-            cliente = this.sistema.findPessoa(cpf);
+            cliente = this.sistema.buscaClientePorCpf(cpf);
             Formatador.linha();
 
         } catch (IllegalArgumentException e) {
