@@ -197,7 +197,7 @@ public final class Menu {
 
     public void listarClientes() {
         try {
-            this.sistema.listarClientes();
+            System.out.println(this.sistema.listarClientes());
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
         }
