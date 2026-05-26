@@ -62,11 +62,11 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void removerAtendimento(Atendimento atendimento) {
-        if (!containsAtendimento(this.listaAtendimentos, atendimento)) {
+        if (!this.listaAtendimentos.containsAtendimento(atendimento)) {
             throw new IllegalArgumentException("Atendimento não está cadastrado no sistema.");
         }
         this.totalFaturado = this.totalFaturado.subtract(atendimento.getTotal());
-        this.listaAtendimentos.remove(atendimento);
+        this.listaAtendimentos.remover(atendimento.getId());
     }
 
     @Override
