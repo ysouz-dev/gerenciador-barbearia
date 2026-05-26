@@ -1,12 +1,10 @@
 package com.ysouz.gerenciadorbarbearia.service;
 
 import com.ysouz.gerenciadorbarbearia.model.*;
-import com.ysouz.gerenciadorbarbearia.util.Formatador;
 import com.ysouz.gerenciadorbarbearia.repository.ClienteDiarioRepository;
 import com.ysouz.gerenciadorbarbearia.repository.AtendimentoRepository;
 
 import java.util.ArrayList;
-import java.math.BigDecimal;
 
 public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     private ClienteDiarioRepository listaClientes;
