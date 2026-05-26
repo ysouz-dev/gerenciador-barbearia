@@ -12,4 +12,12 @@ public class Estatisticas {
         this.totalAtendimentos = 0;
         this.totalFaturado = BigDecimal.ZERO;
     }
+
+    public void incrementarCliente() {
+        this.totalClientes++;
+    }
+
+    public void incrementarAtendimento() {
+        this.totalAtendimentos++;
+    }
 }
