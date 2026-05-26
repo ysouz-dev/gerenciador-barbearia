@@ -11,7 +11,7 @@ public interface SistemaBarbearia {
 
     public ArrayList<Pessoa> listarClientes();
 
-    public void listarAtendimentos();
+    public ArrayList<Atendimento> listarAtendimentos();
 
     public void removerCliente(Pessoa pessoa);
 
