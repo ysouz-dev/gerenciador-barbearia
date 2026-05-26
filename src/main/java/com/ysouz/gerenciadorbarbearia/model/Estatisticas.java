@@ -17,7 +17,16 @@ public class Estatisticas {
         this.totalClientes++;
     }
 
+    public void decrementarCliente() {
+        this.totalClientes--;
+    }
+
     public void incrementarAtendimento() {
         this.totalAtendimentos++;
     }
+
+    public void decrementarAtendimento() {
+        this.totalAtendimentos--;
+    }
+
 }
