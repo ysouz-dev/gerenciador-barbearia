@@ -22,9 +22,9 @@ O foco principal do projeto foi aplicar na prática conceitos fundamentais de ba
 * Polimorfismo
 * Interfaces
 * Enum
-* Estruturas de dados (ArrayList)
+* Estruturas de dados (ArrayList, Map, HashMap)
 * Tratamento de exceções
-* Organização em camadas (model, service, controller, util)
+* Organização em camadas (model, service, repository ,controller, util)
 
 ## 🛠️ Tecnologias utilizadas
 
@@ -37,5 +37,5 @@ Este projeto foi desenvolvido como forma de consolidar o aprendizado em Java e e
 
 ## 📚 Próximos passos
 
-* Implementar uso de HashMap para melhorar buscas
+* Implementar uso de HashMap para melhorar buscas✅
 * Persistência de dados (arquivo ou banco de dados)

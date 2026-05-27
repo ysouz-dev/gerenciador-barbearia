@@ -144,7 +144,7 @@ public final class Menu {
 
         // verifica se existe cliente com esse cpf no sistema
         try {
-            cliente = this.sistema.findPessoa(cpf);
+            cliente = this.sistema.buscaClientePorCpf(cpf);
             Formatador.linha();
 
         } catch (IllegalArgumentException e) {
@@ -188,16 +188,21 @@ public final class Menu {
                 }
             }
         }
-        if (atendimento.getPessoa() instanceof ClienteDiario) {
-            ((ClienteDiario) atendimento.getPessoa()).aumentarAtendimento();
+        try {
+            this.sistema.cadastrarAtendimento(atendimento);
+            System.out.println("Atendimento cadastrado!");
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro: " + e.getMessage());
         }
-        this.sistema.cadastrarAtendimento(atendimento);
-        System.out.println("Atendimento cadastrado!");
     }
 
     public void listarClientes() {
         try {
-            this.sistema.listarClientes();
+            for (Pessoa cliente : this.sistema.listarClientes()) {
+                System.out.println(cliente.resumo());
+                Formatador.linha();
+            }
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
         }
@@ -205,7 +210,10 @@ public final class Menu {
 
     public void listarAtendimentos() {
         try {
-            this.sistema.listarAtendimentos();
+            for (Atendimento atendimento : this.sistema.listarAtendimentos()) {
+                System.out.println(atendimento.resumo());
+                Formatador.linha();
+            }
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
         }
@@ -230,7 +238,7 @@ public final class Menu {
         // verifica se existe cliente com esse cpf no sistema
         Pessoa cliente;
         try {
-            cliente = this.sistema.findPessoa(cpf);
+            cliente = this.sistema.buscaClientePorCpf(cpf);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return;
@@ -249,23 +257,27 @@ public final class Menu {
         Formatador.tituloDinamico("Remover Atendimento", 4);
 
         // leitura e validacao do id
-        String id;
+        Integer id;
         while (true) {
             try {
                 System.out.print("Digite o id do atendimento: ");
-                id = this.scanner.nextLine();
+                id = this.scanner.nextInt();
                 Validador.validaId(id);
                 break;
 
             } catch (IllegalArgumentException e) {
                 System.out.println("Erro: " + e.getMessage());
+
+            } catch (InputMismatchException e) {
+                System.out.println("Erro: digite apenas números.");
+                this.scanner.nextLine();
             }
         }
 
         // procura o atendimento de acordo com o id
         Atendimento atendimento;
         try {
-            atendimento = this.sistema.findAtendimento(id);
+            atendimento = this.sistema.buscaAtendimentoPorId(id);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return;
@@ -281,7 +293,7 @@ public final class Menu {
 
     public void estatisticas() {
         Formatador.tituloDinamico("Estatísticas", 8);
-        this.sistema.estatisticas();
+        System.out.println(this.sistema.estatisticas());
     }
 
     public void encerrarSistema() {
