@@ -13,8 +13,7 @@ public class ClienteDiario extends Pessoa {
     }
 
     @Override
-    public void resumo() {
-        super.resumo();
-        System.out.println("Total de atendimentos: " + this.totalAtendimentos);
+    public String resumo() {
+        return super.resumo() + "\nTotal de atendimentos: " + this.totalAtendimentos;
     }
 }

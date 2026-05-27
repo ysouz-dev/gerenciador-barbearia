@@ -1,119 +1,100 @@
 package com.ysouz.gerenciadorbarbearia.service;
 
 import com.ysouz.gerenciadorbarbearia.model.*;
-import com.ysouz.gerenciadorbarbearia.util.Formatador;
+import com.ysouz.gerenciadorbarbearia.repository.ClienteDiarioRepository;
+import com.ysouz.gerenciadorbarbearia.repository.AtendimentoRepository;
+
 import java.util.ArrayList;
-import java.math.BigDecimal;
 
 public final class SistemaBarbeariaImpl implements SistemaBarbearia {
-    private ArrayList<Pessoa> listaPessoas;
-    private ArrayList<Atendimento> listaAtendimentos;
-    private BigDecimal totalFaturado;
+    private ClienteDiarioRepository listaClientes;
+    private AtendimentoRepository listaAtendimentos;
+    private Estatisticas estatisticas;
 
     public SistemaBarbeariaImpl() {
-        this.listaPessoas = new ArrayList<Pessoa>();
-        this.listaAtendimentos = new ArrayList<Atendimento>();
-        this.totalFaturado = BigDecimal.ZERO;
+        this.listaClientes = new ClienteDiarioRepository();
+        this.listaAtendimentos = new AtendimentoRepository();
+        this.estatisticas = new Estatisticas();
     }
 
-    public Pessoa findPessoa(String cpf) {
-        for (Pessoa people : this.listaPessoas) {
-            if (people.getCPF().equals(cpf)) {
-                return people;
-            }
+    public Pessoa buscaClientePorCpf(String cpf) {
+        if (!this.listaClientes.getLista().containsKey(cpf)) {
+            throw new IllegalArgumentException("O sistema não possui um cliente com esse cpf");
         }
-        throw new IllegalArgumentException("Esse CPF não está cadastrado no sistema.");
+        return this.listaClientes.buscaPorCpf(cpf);
     }
 
-    public Atendimento findAtendimento(String id) {
-        for (Atendimento atendimento : this.listaAtendimentos) {
-            if (atendimento.getId().equals(id)) {
-                return atendimento;
-            }
+    public Atendimento buscaAtendimentoPorId(Integer id) {
+        if (!this.listaAtendimentos.getLista().containsKey(id)) {
+            throw new IllegalArgumentException("O sistema não possui um atendimento com esse ID");
         }
-        throw new IllegalArgumentException("Id de atendimento inexistente ou incorreto.");
+        return this.listaAtendimentos.buscaPorId(id);
     }
 
     @Override
     public void cadastrarCliente(Pessoa pessoa) {
-        if (containsPessoa(this.listaPessoas, pessoa)) {
-            throw new IllegalArgumentException("O sistema já possui um cliente cadastrado com esse cpf.");
+        if (this.listaClientes.containsPessoa(pessoa)) {
+            throw new IllegalArgumentException("O sistema já possui esse cliente cadastrado");
         }
-        listaPessoas.add(pessoa);
+        this.listaClientes.salvar(pessoa);
+        this.estatisticas.incrementarCliente();
     }
 
     @Override
     public void cadastrarAtendimento(Atendimento atendimento) {
-        if (containsAtendimento(this.listaAtendimentos, atendimento)) {
+        if (this.listaAtendimentos.containsAtendimento(atendimento)) {
             throw new IllegalArgumentException("O sistema já possui esse atendimento cadastrado.");
         }
-        this.totalFaturado = this.totalFaturado.add(atendimento.getTotal());
-        listaAtendimentos.add(atendimento);
+        if (atendimento.getServicosRealizados().isEmpty()) {
+            throw new IllegalArgumentException("Não é possivel cadastrar um atendimento sem serviços realizados.");
+        }
+        if (atendimento.getPessoa() instanceof ClienteDiario) {
+            ((ClienteDiario) atendimento.getPessoa()).aumentarAtendimento();
+        }
+        this.listaAtendimentos.salvar(atendimento);
+        this.estatisticas.incrementarAtendimento();
+        this.estatisticas.adicionarValorFaturado(atendimento.getTotal());
     }
 
     @Override
-    public void listarClientes() {
-        if (this.listaPessoas.size() == 0) {
+    public ArrayList<Pessoa> listarClientes() {
+        if (this.listaClientes.getLista().isEmpty()) {
             throw new IllegalStateException("Nenhum cliente cadastrado no sistema.");
         }
-        for (Pessoa pessoa : listaPessoas) {
-            pessoa.resumo();
-            Formatador.linha();
-        }
+        return this.listaClientes.listaDePessoas();
     }
 
     @Override
-    public void listarAtendimentos() {
-        if (this.listaAtendimentos.size() == 0) {
+    public ArrayList<Atendimento> listarAtendimentos() {
+        if (this.listaAtendimentos.getLista().isEmpty()) {
             throw new IllegalStateException("Nenhum atendimento cadastrado no sistema.");
         }
-        int contador = 1;
-        for (Atendimento atendimento : this.listaAtendimentos) {
-            System.out.println("N. " + contador);
-            atendimento.resumo();
-            contador++;
-        }
+        return this.listaAtendimentos.listaDeAtendimento();
     }
 
     @Override
     public void removerCliente(Pessoa pessoa) {
-        if (!containsPessoa(this.listaPessoas, pessoa)) {
+        if (!this.listaClientes.containsPessoa(pessoa)) {
             throw new IllegalArgumentException("Cliente não está cadastrado no sistema.");
         }
-        this.listaPessoas.remove(pessoa);
+        this.listaClientes.remover(pessoa.getCPF());
+        this.estatisticas.decrementarCliente();
     }
 
     @Override
     public void removerAtendimento(Atendimento atendimento) {
-        if (!containsAtendimento(this.listaAtendimentos, atendimento)) {
+        if (!this.listaAtendimentos.containsAtendimento(atendimento)) {
             throw new IllegalArgumentException("Atendimento não está cadastrado no sistema.");
         }
-        this.totalFaturado = this.totalFaturado.subtract(atendimento.getTotal());
-        this.listaAtendimentos.remove(atendimento);
+        this.listaAtendimentos.remover(atendimento.getId());
+        this.estatisticas.removerValorFaturado(atendimento.getTotal());
+        this.estatisticas.decrementarAtendimento();
     }
 
     @Override
-    public void estatisticas() {
-        System.out.println("Total de clientes: " + this.listaPessoas.size());
-        System.out.println("Total de Atendimentos: " + this.listaAtendimentos.size());
-        System.out.println("Total faturado: R$ %.2f".formatted(this.totalFaturado));
-    }
-
-    private static boolean containsPessoa(ArrayList<Pessoa> lista, Pessoa pessoa) {
-        for (Pessoa people : lista) {
-            if (pessoa.getCPF().equals(people.getCPF())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean containsAtendimento(ArrayList<Atendimento> lista, Atendimento atendimento) {
-        for (Atendimento atend : lista) {
-            if (atendimento.getId().equals(atend.getId())) {
-                return true;
-            }
-        }
-        return false;
+    public String estatisticas() {
+        return "Total de clientes: " + this.estatisticas.getTotalClientes() +
+                "\nTotal de Atendimentos: " + this.estatisticas.getTotalAtendimentos() +
+                "\nTotal faturado: R$ " + this.estatisticas.getTotalFaturado();
     }
 }

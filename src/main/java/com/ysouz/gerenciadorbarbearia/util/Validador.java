@@ -33,16 +33,12 @@ public abstract class Validador {
         }
     }
 
-    public static void validaId(String id) {
-        if (id == null || id.isBlank() || !id.startsWith("#")) {
-            throw new IllegalArgumentException("Id inválido! (Ex: #00)");
+    public static void validaId(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("O ID não pode ser nulo");
         }
-
-        String idSemHash = id.replace("#", "");
-        for (int i = 0; i < idSemHash.length(); i++) {
-            if (!Character.isDigit(idSemHash.charAt(i))) {
-                throw new IllegalArgumentException("Id inválido! (Ex: #00)");
-            }
+        if (id < 1) {
+            throw new IllegalArgumentException("O ID não pode ser menor ou igual a ZERO");
         }
     }
 }

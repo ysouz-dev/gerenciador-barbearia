@@ -49,11 +49,11 @@ public abstract class Pessoa {
         this.sexo = sexo;
     }
 
-    public void resumo() {
-        System.out.println("Nome: " + this.nome);
-        System.out.println("Idade: " + this.idade);
-        System.out.println("CPF: " + this.cpf);
-        System.out.println("Sexo: " + this.sexo);
+    public String resumo() {
+        return "Nome: " + this.nome +
+                "\nIdade: " + this.idade +
+                "\nCPF: " + this.cpf +
+                "\nSexo: " + this.sexo;
     }
 
     public String getNome() {
