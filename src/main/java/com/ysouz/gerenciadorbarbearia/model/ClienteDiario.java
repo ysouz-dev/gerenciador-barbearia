@@ -1,4 +1,5 @@
 package com.ysouz.gerenciadorbarbearia.model;
+import com.ysouz.gerenciadorbarbearia.enums.Sexo;
 
 public class ClienteDiario extends Pessoa {
     private int totalAtendimentos;

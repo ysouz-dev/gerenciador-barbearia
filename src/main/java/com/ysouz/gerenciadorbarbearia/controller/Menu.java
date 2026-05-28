@@ -3,6 +3,8 @@ package com.ysouz.gerenciadorbarbearia.controller;
 import com.ysouz.gerenciadorbarbearia.util.*;
 import com.ysouz.gerenciadorbarbearia.service.SistemaBarbeariaImpl;
 import com.ysouz.gerenciadorbarbearia.model.*;
+import com.ysouz.gerenciadorbarbearia.enums.Sexo;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -99,12 +101,12 @@ public final class Menu {
         }
 
         // leitura e validacao de sexo
-        Pessoa.Sexo sexo = Pessoa.Sexo.NAO_INFORMADO;
+        Sexo sexo = Sexo.NAO_INFORMADO;
         while (true) {
             try {
                 System.out.print("Sexo: ");
                 sexo = sexo.toSexo(this.scanner.nextLine());
-                Pessoa.Sexo.isSexo(sexo);
+                Sexo.isSexo(sexo);
                 break;
 
             } catch (IllegalArgumentException e) {
