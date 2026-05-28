@@ -29,8 +29,8 @@ public class ClienteDiarioRepository {
         throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf.");
     }
 
-    public boolean containsPessoa(Pessoa pessoa) {
-        if (!this.listaPessoas.containsKey(pessoa.getCPF())) {
+    public boolean containsPessoa(String cpf) {
+        if (!this.listaPessoas.containsKey(cpf)) {
             return false;
         }
         return true;
