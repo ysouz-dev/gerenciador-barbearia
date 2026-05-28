@@ -33,8 +33,8 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void cadastrarCliente(Pessoa pessoa) {
-        if (this.listaClientes.containsPessoa(pessoa)) {
-            throw new IllegalArgumentException("O sistema já possui esse cliente cadastrado");
+        if (this.listaClientes.containsPessoa(pessoa.getCPF())) {
+            throw new IllegalArgumentException("O sistema já possui um cliente cadastrado com esse CPF");
         }
         this.listaClientes.salvar(pessoa);
         this.estatisticas.incrementarCliente();
@@ -42,7 +42,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void cadastrarAtendimento(Atendimento atendimento) {
-        if (this.listaAtendimentos.containsAtendimento(atendimento)) {
+        if (this.listaAtendimentos.containsAtendimento(atendimento.getId())) {
             throw new IllegalArgumentException("O sistema já possui esse atendimento cadastrado.");
         }
         if (atendimento.getServicosRealizados().isEmpty()) {
@@ -74,7 +74,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void removerCliente(Pessoa pessoa) {
-        if (!this.listaClientes.containsPessoa(pessoa)) {
+        if (!this.listaClientes.containsPessoa(pessoa.getCPF())) {
             throw new IllegalArgumentException("Cliente não está cadastrado no sistema.");
         }
         this.listaClientes.remover(pessoa.getCPF());
@@ -83,7 +83,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void removerAtendimento(Atendimento atendimento) {
-        if (!this.listaAtendimentos.containsAtendimento(atendimento)) {
+        if (!this.listaAtendimentos.containsAtendimento(atendimento.getId())) {
             throw new IllegalArgumentException("Atendimento não está cadastrado no sistema.");
         }
         this.listaAtendimentos.remover(atendimento.getId());

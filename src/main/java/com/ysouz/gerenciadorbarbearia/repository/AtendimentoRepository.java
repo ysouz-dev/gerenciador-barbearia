@@ -29,8 +29,8 @@ public class AtendimentoRepository {
         throw new IllegalArgumentException("Nenhum atendimento encontrado com esse id");
     }
 
-    public boolean containsAtendimento(Atendimento atendimento) {
-        if (this.listaAtendimento.containsKey(atendimento.getId())) {
+    public boolean containsAtendimento(Integer id) {
+        if (this.listaAtendimento.containsKey(id)) {
             return true;
         }
         return false;
