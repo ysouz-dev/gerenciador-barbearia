@@ -160,7 +160,7 @@ public final class Menu {
         int opcao = Integer.MIN_VALUE;
         while (opcao != 0) {
             Servico[] lista = Servico.values();
-            Servico.listaDeServicos();
+            System.out.println(Servico.listaDeServicos());
             System.out.println("[ 0 ] - Finalizar");
 
             // leitura e validacao da opcao desejada de servico

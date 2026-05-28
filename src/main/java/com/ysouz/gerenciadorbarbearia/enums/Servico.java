@@ -22,11 +22,14 @@ public enum Servico {
         return this.valor;
     }
 
-    public static void listaDeServicos() {
+    public static String listaDeServicos() {
         Servico[] lista = Servico.values();
+        StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < lista.length; i++) {
-            System.out.printf("[ %d ] - %s R$ %.2f%n", i + 1, lista[i], lista[i].getValor());
+            sb.append("[ %d ] - %s R$ %.2f\n".formatted(i+1, lista[i], lista[i].getValor()));
         }
+        return sb.toString();
     }
 
     public static void isServico(Servico servico) {
