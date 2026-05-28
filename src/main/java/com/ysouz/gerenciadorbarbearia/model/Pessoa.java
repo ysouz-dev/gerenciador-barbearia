@@ -1,37 +1,9 @@
 package com.ysouz.gerenciadorbarbearia.model;
 
 import com.ysouz.gerenciadorbarbearia.util.Validador;
+import com.ysouz.gerenciadorbarbearia.enums.Sexo;
 
 public abstract class Pessoa {
-    public enum Sexo {
-        MASCULINO("MASCULINO", "M"),
-        FEMININO("FEMININO", "F"),
-        NAO_INFORMADO("NÃO INFORMADO", "N");
-
-        private String nome;
-        private String sigla;
-
-        Sexo(String nome, String sigla) {
-            this.nome = nome;
-            this.sigla = sigla;
-        }
-
-        public Sexo toSexo(String sexo) {
-            for (Sexo sex : Sexo.values()) {
-                if (sexo.strip().equalsIgnoreCase(sex.nome) || sexo.strip().equalsIgnoreCase(sex.sigla)) {
-                    return sex;
-                }
-            }
-            throw new IllegalArgumentException("Sexo inválido!");
-        }
-
-        public static void isSexo(Sexo sexo) {
-            if (sexo == null) {
-                throw new IllegalArgumentException("Sexo inválido!");
-            }
-        }
-    }
-
     private String nome;
     private int idade;
     private final String cpf;
