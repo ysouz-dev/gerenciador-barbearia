@@ -12,7 +12,7 @@ public abstract class Conexao {
 
     static {
         try {
-            prop.load(Conexao.class.getClassLoader().getResourceAsStream("dataabase.properties"));
+            prop.load(Conexao.class.getClassLoader().getResourceAsStream("database.properties"));
 
         } catch (IOException e) {
             throw new RuntimeException("Erro ao carregar configurações do banco de dados: " + e.getMessage());
