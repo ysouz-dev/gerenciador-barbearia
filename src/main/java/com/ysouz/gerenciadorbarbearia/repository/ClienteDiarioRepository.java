@@ -1,7 +1,11 @@
 package com.ysouz.gerenciadorbarbearia.repository;
 
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
+import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -14,7 +18,19 @@ public class ClienteDiarioRepository {
     }
 
     public void salvar(Pessoa pessoa) {
-        this.listaPessoas.put(pessoa.getCPF(), pessoa);
+        try {
+            Connection conexao = Conexao.getConexao();
+            String query = "INSERT INTO clientes VALUES (?, ?, year(now()) - ?, ?)";
+            PreparedStatement statement = conexao.prepareStatement(query);
+            statement.setString(1, pessoa.getCPF());
+            statement.setString(2, pessoa.getNome());
+            statement.setInt(3, pessoa.getIdade());
+            statement.setString(4, pessoa.getSexo().getNomeSexo());
+            statement.executeUpdate();
+            conexao.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao salvar cliente: " + e.getMessage());
+        }
     }
 
     public void remover(String cpf) {
