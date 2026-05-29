@@ -15,7 +15,7 @@ public abstract class Conexao {
             prop.load(Conexao.class.getClassLoader().getResourceAsStream("dataabase.properties"));
 
         } catch (IOException e) {
-            System.out.println("Erro ao carregar configurações do banco de dados: " + e.getMessage());
+            throw new RuntimeException("Erro ao carregar configurações do banco de dados: " + e.getMessage());
         }
     }
 
@@ -27,7 +27,7 @@ public abstract class Conexao {
 
             return DriverManager.getConnection(url, user, pass);
         } catch (SQLException e) {
-            System.out.println("Erro ao conectar com o banco de dados: " + e.getMessage());
+            throw new RuntimeException("Erro ao conectar com o banco de dados: " + e.getMessage());
         }
     }
 
