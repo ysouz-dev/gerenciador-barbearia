@@ -28,14 +28,24 @@ public class ClienteDiarioRepository {
             statement.setString(4, pessoa.getSexo().getNomeSexo());
             statement.executeUpdate();
             conexao.close();
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar cliente: " + e.getMessage());
         }
     }
 
     public void remover(String cpf) {
-        Pessoa c = buscaPorCpf(cpf);
-        this.listaPessoas.remove(cpf, c);
+        try {
+            Connection conexao = Conexao.getConexao();
+            String query = "DELETE FROM clientes WHERE cpf = '?'";
+            PreparedStatement statement = conexao.prepareStatement(query);
+            statement.setString(1, cpf);
+            statement.executeUpdate();
+            conexao.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao remover cliente: " + e.getMessage());
+        }
     }
 
     public Pessoa buscaPorCpf(String cpf) {
