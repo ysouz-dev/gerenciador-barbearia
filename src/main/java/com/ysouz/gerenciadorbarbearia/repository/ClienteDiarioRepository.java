@@ -1,11 +1,15 @@
 package com.ysouz.gerenciadorbarbearia.repository;
 
+import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
+import com.ysouz.gerenciadorbarbearia.enums.Sexo;
 
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -49,10 +53,28 @@ public class ClienteDiarioRepository {
     }
 
     public Pessoa buscaPorCpf(String cpf) {
-        if (this.listaPessoas.containsKey(cpf)) {
-            return this.listaPessoas.get(cpf);
+        try {
+            Connection conexao = Conexao.getConexao();
+            String query = "SELECT * FROM clientes WHERE cpf = ?";
+            PreparedStatement statement = conexao.prepareStatement(query);
+            statement.setString(1, cpf);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                String nome = rs.getString("nome");
+                int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
+                String ClienteCPF = rs.getString("cpf");
+                Sexo sexo = Sexo.NAO_INFORMADO;
+                sexo = sexo.toSexo(rs.getString("sexo"));
+
+                return new ClienteDiario(nome, idade, ClienteCPF, sexo);
+
+            } else {
+                throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar cliente no banco: " + e.getMessage());
         }
-        throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf.");
     }
 
     public boolean containsPessoa(String cpf) {
