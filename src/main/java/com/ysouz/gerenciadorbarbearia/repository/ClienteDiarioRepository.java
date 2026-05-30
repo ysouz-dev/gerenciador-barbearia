@@ -14,11 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClienteDiarioRepository {
-    private Map<String, Pessoa> listaPessoas;
-
-    public ClienteDiarioRepository() {
-        this.listaPessoas = new HashMap<>();
-    }
 
     public void salvar(Pessoa pessoa) {
         String query = "INSERT INTO clientes VALUES (?, ?, year(now()) - ?, ?)";
