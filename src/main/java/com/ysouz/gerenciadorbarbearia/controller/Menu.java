@@ -238,9 +238,8 @@ public final class Menu {
         }
 
         // verifica se existe cliente com esse cpf no sistema
-        Pessoa cliente;
         try {
-            cliente = this.sistema.buscaClientePorCpf(cpf);
+            this.sistema.buscaClientePorCpf(cpf);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return;
@@ -248,7 +247,7 @@ public final class Menu {
 
         // remove cliente do sistema
         try {
-            this.sistema.removerCliente(cliente);
+            this.sistema.removerCliente(cpf);
             System.out.println("Cliente removido!");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
