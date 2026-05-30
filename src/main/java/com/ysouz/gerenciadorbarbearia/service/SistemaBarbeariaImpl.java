@@ -61,7 +61,8 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         if (this.listaClientes.getLista().isEmpty()) {
             throw new IllegalStateException("Nenhum cliente cadastrado no sistema.");
         }
-        return this.listaClientes.listaDePessoas();
+        return new ArrayList<>();
+        //return this.listaClientes.listaDeClientes();
     }
 
     @Override
