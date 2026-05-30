@@ -22,16 +22,16 @@ public class ClienteDiarioRepository {
     }
 
     public void salvar(Pessoa pessoa) {
-        try {
-            Connection conexao = Conexao.getConexao();
-            String query = "INSERT INTO clientes VALUES (?, ?, year(now()) - ?, ?)";
-            PreparedStatement statement = conexao.prepareStatement(query);
+        String query = "INSERT INTO clientes VALUES (?, ?, year(now()) - ?, ?)";
+
+        try (Connection conexao = Conexao.getConexao();
+            PreparedStatement statement = conexao.prepareStatement(query)) {
+
             statement.setString(1, pessoa.getCPF());
             statement.setString(2, pessoa.getNome());
             statement.setInt(3, pessoa.getIdade());
             statement.setString(4, pessoa.getSexo().getNomeSexo());
             statement.executeUpdate();
-            conexao.close();
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar cliente: " + e.getMessage());
@@ -39,13 +39,13 @@ public class ClienteDiarioRepository {
     }
 
     public void remover(String cpf) {
-        try {
-            Connection conexao = Conexao.getConexao();
-            String query = "DELETE FROM clientes WHERE cpf = '?'";
-            PreparedStatement statement = conexao.prepareStatement(query);
+        String query = "DELETE FROM clientes WHERE cpf = '?'";
+
+        try (Connection conexao = Conexao.getConexao();
+            PreparedStatement statement = conexao.prepareStatement(query)){
+
             statement.setString(1, cpf);
             statement.executeUpdate();
-            conexao.close();
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao remover cliente: " + e.getMessage());
@@ -53,10 +53,11 @@ public class ClienteDiarioRepository {
     }
 
     public Pessoa buscaPorCpf(String cpf) {
-        try {
-            Connection conexao = Conexao.getConexao();
-            String query = "SELECT * FROM clientes WHERE cpf = ?";
-            PreparedStatement statement = conexao.prepareStatement(query);
+        String query = "SELECT * FROM clientes WHERE cpf = ?";
+
+        try (Connection conexao = Conexao.getConexao();
+            PreparedStatement statement = conexao.prepareStatement(query)){
+
             statement.setString(1, cpf);
             ResultSet rs = statement.executeQuery();
 
@@ -66,7 +67,6 @@ public class ClienteDiarioRepository {
                 String ClienteCPF = rs.getString("cpf");
                 Sexo sexo = Sexo.NAO_INFORMADO;
                 sexo = sexo.toSexo(rs.getString("sexo"));
-
                 return new ClienteDiario(nome, idade, ClienteCPF, sexo);
 
             } else {
@@ -78,13 +78,15 @@ public class ClienteDiarioRepository {
     }
 
     public boolean containsCliente(String cpf) {
-        try {
-            Connection conexao = Conexao.getConexao();
-            String query = "SELECT nome FROM clientes WHERE cpf = ?";
-            PreparedStatement statement = conexao.prepareStatement(query);
+        String query = "SELECT nome FROM clientes WHERE cpf = ?";
+
+        try (Connection conexao = Conexao.getConexao();
+            PreparedStatement statement = conexao.prepareStatement(query)) {
+
             statement.setString(1, cpf);
             ResultSet rs = statement.executeQuery();
             return rs.next();
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao verificar se existe cliente no banco: " + e.getMessage());
         }
