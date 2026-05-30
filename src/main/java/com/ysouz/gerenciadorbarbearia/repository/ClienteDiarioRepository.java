@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class ClienteDiarioRepository {
 
     public void salvar(Pessoa pessoa) {
-        String query = "INSERT INTO clientes VALUES (?, ?, year(now()) - ?, ?)";
+        String query = "INSERT INTO clientes VALUES (?, ?, year(now()) - ?, ?, default)";
 
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query)) {
