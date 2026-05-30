@@ -5,6 +5,7 @@ import com.ysouz.gerenciadorbarbearia.repository.ClienteDiarioRepository;
 import com.ysouz.gerenciadorbarbearia.repository.AtendimentoRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     private ClienteDiarioRepository listaClientes;
@@ -57,12 +58,11 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     }
 
     @Override
-    public ArrayList<Pessoa> listarClientes() {
+    public List<Pessoa> listarClientes() {
         if (this.listaClientes.listaDeClientes().isEmpty()) {
             throw new IllegalStateException("Nenhum cliente cadastrado no sistema.");
         }
-        return new ArrayList<>();
-        //return this.listaClientes.listaDeClientes();
+        return this.listaClientes.listaDeClientes();
     }
 
     @Override

@@ -3,13 +3,14 @@ package com.ysouz.gerenciadorbarbearia.service;
 import com.ysouz.gerenciadorbarbearia.model.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface SistemaBarbearia {
     public void cadastrarCliente(Pessoa pessoa);
 
     public void cadastrarAtendimento(Atendimento atendimento);
 
-    public ArrayList<Pessoa> listarClientes();
+    public List<Pessoa> listarClientes();
 
     public ArrayList<Atendimento> listarAtendimentos();
 
