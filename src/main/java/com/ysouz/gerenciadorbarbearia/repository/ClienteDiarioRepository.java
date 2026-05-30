@@ -77,11 +77,17 @@ public class ClienteDiarioRepository {
         }
     }
 
-    public boolean containsPessoa(String cpf) {
-        if (!this.listaPessoas.containsKey(cpf)) {
-            return false;
+    public boolean containsCliente(String cpf) {
+        try {
+            Connection conexao = Conexao.getConexao();
+            String query = "SELECT nome FROM clientes WHERE cpf = ?";
+            PreparedStatement statement = conexao.prepareStatement(query);
+            statement.setString(1, cpf);
+            ResultSet rs = statement.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar se existe cliente no banco: " + e.getMessage());
         }
-        return true;
     }
 
     public ArrayList<Pessoa> listaDePessoas() {

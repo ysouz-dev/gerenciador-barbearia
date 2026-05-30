@@ -33,7 +33,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void cadastrarCliente(Pessoa pessoa) {
-        if (this.listaClientes.containsPessoa(pessoa.getCPF())) {
+        if (this.listaClientes.containsCliente(pessoa.getCPF())) {
             throw new IllegalArgumentException("O sistema já possui um cliente cadastrado com esse CPF");
         }
         this.listaClientes.salvar(pessoa);
@@ -74,7 +74,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void removerCliente(Pessoa pessoa) {
-        if (!this.listaClientes.containsPessoa(pessoa.getCPF())) {
+        if (!this.listaClientes.containsCliente(pessoa.getCPF())) {
             throw new IllegalArgumentException("Cliente não está cadastrado no sistema.");
         }
         this.listaClientes.remover(pessoa.getCPF());
