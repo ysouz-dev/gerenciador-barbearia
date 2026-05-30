@@ -120,9 +120,4 @@ public class ClienteDiarioRepository {
             throw new RuntimeException("Erro ao buscar lista de clientes no banco: " + e.getMessage());
         }
     }
-
-    public HashMap<String, Pessoa> getLista() {
-        return new HashMap<String, Pessoa>(this.listaPessoas);
-    }
-
 }
