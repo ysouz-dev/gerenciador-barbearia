@@ -93,21 +93,17 @@ public class ClienteDiarioRepository {
             PreparedStatement statement = conexao.prepareStatement(query)){
 
             ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                List<Pessoa> lista = new ArrayList<>();
-                while (rs.next()) {
-                    String nome = rs.getString("nome");
-                    String cpf = rs.getString("cpf");
-                    int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
-                    Sexo sexo = Sexo.NAO_INFORMADO;
-                    sexo = sexo.toSexo(rs.getString("sexo"));
+            List<Pessoa> lista = new ArrayList<>();
+            while (rs.next()) {
+                String nome = rs.getString("nome");
+                String cpf = rs.getString("cpf");
+                int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
+                Sexo sexo = Sexo.NAO_INFORMADO;
+                sexo = sexo.toSexo(rs.getString("sexo"));
 
-                    lista.add(new ClienteDiario(nome, idade, cpf, sexo));
-                }
-                return lista;
-            } else {
-                return new ArrayList<>();
+                lista.add(new ClienteDiario(nome, idade, cpf, sexo));
             }
+            return lista;
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar lista de clientes no banco: " + e.getMessage());
