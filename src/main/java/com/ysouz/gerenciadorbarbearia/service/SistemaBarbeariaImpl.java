@@ -18,7 +18,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     }
 
     public Pessoa buscaClientePorCpf(String cpf) {
-        if (!this.listaClientes.listaDeClientes().containsKey(cpf)) {
+        if (!this.listaClientes.containsCliente(cpf)) {
             throw new IllegalArgumentException("O sistema não possui um cliente com esse cpf");
         }
         return this.listaClientes.buscaPorCpf(cpf);
@@ -74,11 +74,11 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     }
 
     @Override
-    public void removerCliente(Pessoa pessoa) {
-        if (!this.listaClientes.containsCliente(pessoa.getCPF())) {
+    public void removerCliente(String cpf) {
+        if (!this.listaClientes.containsCliente(cpf)){
             throw new IllegalArgumentException("Cliente não está cadastrado no sistema.");
         }
-        this.listaClientes.remover(pessoa.getCPF());
+        this.listaClientes.remover(cpf);
         this.estatisticas.decrementarCliente();
     }
 

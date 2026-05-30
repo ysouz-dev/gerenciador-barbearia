@@ -33,7 +33,7 @@ public class ClienteDiarioRepository {
     }
 
     public void remover(String cpf) {
-        String query = "DELETE FROM clientes WHERE cpf = '?'";
+        String query = "DELETE FROM clientes WHERE cpf = ?";
 
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query)){
