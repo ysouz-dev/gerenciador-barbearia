@@ -18,7 +18,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     }
 
     public Pessoa buscaClientePorCpf(String cpf) {
-        if (!this.listaClientes.getLista().containsKey(cpf)) {
+        if (!this.listaClientes.listaDeClientes().containsKey(cpf)) {
             throw new IllegalArgumentException("O sistema não possui um cliente com esse cpf");
         }
         return this.listaClientes.buscaPorCpf(cpf);
@@ -58,7 +58,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public ArrayList<Pessoa> listarClientes() {
-        if (this.listaClientes.getLista().isEmpty()) {
+        if (this.listaClientes.listaDeClientes().isEmpty()) {
             throw new IllegalStateException("Nenhum cliente cadastrado no sistema.");
         }
         return new ArrayList<>();
