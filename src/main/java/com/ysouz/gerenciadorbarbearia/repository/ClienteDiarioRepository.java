@@ -10,8 +10,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ClienteDiarioRepository {
 
@@ -86,7 +86,7 @@ public class ClienteDiarioRepository {
         }
     }
 
-    public Map<String, Pessoa> listaDeClientes() {
+    public List<Pessoa> listaDeClientes() {
         String query = "SELECT * FROM clientes";
 
         try (Connection conexao = Conexao.getConexao();
@@ -94,7 +94,7 @@ public class ClienteDiarioRepository {
 
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                Map<String, Pessoa> lista = new HashMap<>();
+                List<Pessoa> lista = new ArrayList<>();
                 while (rs.next()) {
                     String nome = rs.getString("nome");
                     String cpf = rs.getString("cpf");
@@ -102,11 +102,11 @@ public class ClienteDiarioRepository {
                     Sexo sexo = Sexo.NAO_INFORMADO;
                     sexo = sexo.toSexo(rs.getString("sexo"));
 
-                    lista.put(cpf, new ClienteDiario(nome, idade, cpf, sexo));
+                    lista.add(new ClienteDiario(nome, idade, cpf, sexo));
                 }
                 return lista;
             } else {
-                return new HashMap<>();
+                return new ArrayList<>();
             }
 
         } catch (SQLException e) {
