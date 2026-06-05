@@ -49,8 +49,14 @@ public class AtendimentoRepository {
     }
 
     public void remover(Integer id) {
-        Atendimento atend = buscaPorId(id);
-        this.listaAtendimento.remove(id, atend);
+        String query = "DELETE FROM atendimentos WHERE id = ?";
+        try (Connection conexao = Conexao.getConexao();
+            PreparedStatement statement = conexao.prepareStatement(query)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao remover atendimento: " + e.getMessage());
+        }
     }
 
     public Atendimento buscaPorId(Integer id) {
