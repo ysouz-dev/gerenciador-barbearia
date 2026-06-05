@@ -2,13 +2,15 @@ package com.ysouz.gerenciadorbarbearia.repository;
 
 import com.ysouz.gerenciadorbarbearia.model.Atendimento;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
-import com.ysouz.gerenciadorbarbearia.enums.Servico;
+import com.ysouz.gerenciadorbarbearia.enums.*;
+import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -60,10 +62,30 @@ public class AtendimentoRepository {
     }
 
     public Atendimento buscaPorId(Integer id) {
-        if (this.listaAtendimento.containsKey(id)) {
-            return this.listaAtendimento.get(id);
+        String query = "SELECT cl.* FROM atendimentos as ate " +
+                    "JOIN clientes as cl " +
+                    "ON cl.cpf = ate.cliente_cpf " +
+                    "WHERE ate.id = ?";
+
+        try (Connection conexao = Conexao.getConexao();
+            PreparedStatement statement = conexao.prepareStatement(query)) {
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                String cpf = rs.getString("cpf");
+                String nome = rs.getString("nome");
+                int idade =  LocalDate.now().getYear() - rs.getInt("nascimento");
+                Sexo sexo = Sexo.NAO_INFORMADO;
+                sexo = sexo.toSexo(rs.getString("sexo"));
+                return new Atendimento(new ClienteDiario(nome, idade, cpf, sexo));
+
+            } else {
+                throw new IllegalArgumentException("Nenhum atendimento encontrado com esse ID");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar atendimento: " + e.getMessage());
         }
-        throw new IllegalArgumentException("Nenhum atendimento encontrado com esse id");
     }
 
     public boolean containsAtendimento(Integer id) {
