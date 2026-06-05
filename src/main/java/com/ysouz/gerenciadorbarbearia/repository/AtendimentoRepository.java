@@ -1,9 +1,17 @@
 package com.ysouz.gerenciadorbarbearia.repository;
 
 import com.ysouz.gerenciadorbarbearia.model.Atendimento;
+import com.ysouz.gerenciadorbarbearia.connection.Conexao;
+import com.ysouz.gerenciadorbarbearia.enums.Servico;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.ArrayList;
 
 public class AtendimentoRepository {
@@ -14,7 +22,30 @@ public class AtendimentoRepository {
     }
 
     public void salvar(Atendimento atendimento) {
-        this.listaAtendimento.put(atendimento.getId(), atendimento);
+        String query = "INSERT INTO atendimentos(cliente_cpf, valor) VALUES (?, ?) ";
+        try (Connection conexao = Conexao.getConexao();
+            PreparedStatement statement = conexao.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, atendimento.getPessoa().getCPF());
+            statement.setBigDecimal(2, atendimento.getTotal());
+            statement.executeUpdate();
+
+            try (ResultSet rs = statement.getGeneratedKeys()) {
+                if (rs.next()) {
+                    String query2 = "INSERT INTO atendimentos_servicos(id_atendimento, id_servico) VALUES (?, ?)";
+                    int idAtendimento = rs.getInt(1);
+
+                    for (Servico servico : atendimento.getServicosRealizados()) {
+                        try (PreparedStatement statement2 = conexao.prepareStatement(query2)){
+                            statement2.setInt(1, idAtendimento);
+                            statement2.setInt(2, List.of(Servico.values()).indexOf(servico) + 1);
+                            statement2.executeUpdate();
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao salvar atendimento: " + e.getMessage());
+        }
     }
 
     public void remover(Integer id) {
