@@ -89,10 +89,16 @@ public class AtendimentoRepository {
     }
 
     public boolean containsAtendimento(Integer id) {
-        if (this.listaAtendimento.containsKey(id)) {
-            return true;
+        String query = "SELECT id FROM atendimentos WHERE id = ?";
+        try (Connection conexao = Conexao.getConexao();
+            PreparedStatement statement = conexao.prepareStatement(query)) {
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            return rs.next();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar se atendimento está no banco: " + e.getMessage());
         }
-        return false;
     }
 
     public ArrayList<Atendimento> listaDeAtendimento() {
