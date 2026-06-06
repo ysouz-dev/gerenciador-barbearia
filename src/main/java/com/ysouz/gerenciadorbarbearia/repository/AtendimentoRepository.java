@@ -17,11 +17,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class AtendimentoRepository {
-    private Map<Integer, Atendimento> listaAtendimento;
-
-    public AtendimentoRepository() {
-        this.listaAtendimento = new HashMap<>();
-    }
 
     public void salvar(Atendimento atendimento) {
         String query = "INSERT INTO atendimentos(cliente_cpf, valor) VALUES (?, ?) ";
@@ -135,9 +130,4 @@ public class AtendimentoRepository {
             throw new RuntimeException("Erro ao retornar lista de atendimentos: " + e.getMessage());
         }
     }
-
-    public HashMap<Integer, Atendimento> getLista() {
-        return new HashMap<Integer, Atendimento>(this.listaAtendimento);
-    }
-
 }
