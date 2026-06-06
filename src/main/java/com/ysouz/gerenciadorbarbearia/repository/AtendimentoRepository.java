@@ -71,8 +71,7 @@ public class AtendimentoRepository {
                 String cpf = rs.getString("cpf");
                 String nome = rs.getString("nome");
                 int idade =  LocalDate.now().getYear() - rs.getInt("nascimento");
-                Sexo sexo = Sexo.NAO_INFORMADO;
-                sexo = sexo.toSexo(rs.getString("sexo"));
+                Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
                 return new Atendimento(new ClienteDiario(nome, idade, cpf, sexo));
 
             } else {
