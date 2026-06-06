@@ -58,6 +58,13 @@ public class Atendimento {
         return this.totalServico;
     }
 
+    public void setTotal(BigDecimal novoTotal) {
+        if (novoTotal.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("O novo total do servico não pode ser menor ou igual a 0");
+        }
+        this.totalServico = novoTotal;
+    }
+
     private static boolean containsServico(ArrayList<Servico> lista, Servico servico) {
         for (Servico service : lista) {
             if (servico == service) {
