@@ -101,8 +101,39 @@ public class AtendimentoRepository {
         }
     }
 
-    public ArrayList<Atendimento> listaDeAtendimento() {
-        return new ArrayList<Atendimento>(this.listaAtendimento.values());
+    public List<Atendimento> listaDeAtendimento() {
+        String query = "SELECT ate.id, cl.*, sv.nome as servico, ate.valor FROM atendimentos_servicos as ates " +
+                        "JOIN atendimentos as ate " +
+                        "ON ate.id = ates.id_atendimento " +
+                        "JOIN clientes as cl " +
+                        "ON cl.cpf = ate.cliente_cpf " +
+                        "JOIN servicos as sv " +
+                        "ON sv.id = ates.id_servico";
+
+        try (Connection conexao = Conexao.getConexao();
+            PreparedStatement statement = conexao.prepareStatement(query)) {
+            ResultSet rs = statement.executeQuery();
+
+            Map<Integer, Atendimento> lista = new HashMap<>();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+
+                if (!lista.containsKey(id)) {
+                    String nome = rs.getString("nome");
+                    String cpf = rs.getString("cpf");
+                    int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
+                    Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
+                    Atendimento atendimento = new Atendimento(new ClienteDiario(nome, idade, cpf, sexo));
+                    atendimento.setTotal(rs.getBigDecimal("valor"));
+                    lista.put(id, atendimento);
+                }
+                lista.get(id).adicionarServico(Servico.valueOf(rs.getString("servico")));
+            }
+            return new ArrayList<>(lista.values());
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao retornar lista de atendimentos: " + e.getMessage());
+        }
     }
 
     public HashMap<Integer, Atendimento> getLista() {
