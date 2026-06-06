@@ -16,7 +16,7 @@ public interface SistemaBarbearia {
 
     public void removerCliente(String cpf);
 
-    public void removerAtendimento(Atendimento atendimento);
+    public void removerAtendimento(Integer id);
 
     public String estatisticas();
 }

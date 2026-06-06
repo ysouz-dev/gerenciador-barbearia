@@ -66,8 +66,8 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     }
 
     @Override
-    public ArrayList<Atendimento> listarAtendimentos() {
-        if (this.listaAtendimentos.getLista().isEmpty()) {
+    public List<Atendimento> listarAtendimentos() {
+        if (this.listaAtendimentos.listaDeAtendimento().isEmpty()) {
             throw new IllegalStateException("Nenhum atendimento cadastrado no sistema.");
         }
         return this.listaAtendimentos.listaDeAtendimento();
@@ -83,12 +83,12 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     }
 
     @Override
-    public void removerAtendimento(Atendimento atendimento) {
-        if (!this.listaAtendimentos.containsAtendimento(atendimento.getId())) {
+    public void removerAtendimento(Integer id) {
+        if (!this.listaAtendimentos.containsAtendimento(id)) {
             throw new IllegalArgumentException("Atendimento não está cadastrado no sistema.");
         }
-        this.listaAtendimentos.remover(atendimento.getId());
-        this.estatisticas.removerValorFaturado(atendimento.getTotal());
+        this.listaAtendimentos.remover(id);
+        this.estatisticas.removerValorFaturado(this.listaAtendimentos.buscaPorId(id).getTotal());
         this.estatisticas.decrementarAtendimento();
     }
 
