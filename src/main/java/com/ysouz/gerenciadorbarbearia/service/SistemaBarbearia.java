@@ -12,7 +12,7 @@ public interface SistemaBarbearia {
 
     public List<Pessoa> listarClientes();
 
-    public ArrayList<Atendimento> listarAtendimentos();
+    public List<Atendimento> listarAtendimentos();
 
     public void removerCliente(String cpf);
 
