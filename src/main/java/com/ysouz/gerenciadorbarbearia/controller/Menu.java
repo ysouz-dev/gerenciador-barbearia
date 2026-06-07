@@ -275,17 +275,15 @@ public final class Menu {
             }
         }
 
-        // procura o atendimento de acordo com o id
-        Atendimento atendimento;
-        try {
-            atendimento = this.sistema.buscaAtendimentoPorId(id);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+        // verifica se existe atendimento com o ID antes de remover
+        if (!this.sistema.containsAtendimento(id)) {
+            System.out.println("Erro: Atendimento não encontrado no sistema");
             return;
         }
 
+        // remove atendimento
         try {
-            this.sistema.removerAtendimento(atendimento);
+            this.sistema.removerAtendimento(id);
             System.out.println("Atendimento removido!");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());

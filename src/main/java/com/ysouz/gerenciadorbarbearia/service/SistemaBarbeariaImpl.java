@@ -4,7 +4,6 @@ import com.ysouz.gerenciadorbarbearia.model.*;
 import com.ysouz.gerenciadorbarbearia.repository.ClienteDiarioRepository;
 import com.ysouz.gerenciadorbarbearia.repository.AtendimentoRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class SistemaBarbeariaImpl implements SistemaBarbearia {
@@ -25,11 +24,8 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
         return this.listaClientes.buscaPorCpf(cpf);
     }
 
-    public Atendimento buscaAtendimentoPorId(Integer id) {
-        if (!this.listaAtendimentos.getLista().containsKey(id)) {
-            throw new IllegalArgumentException("O sistema não possui um atendimento com esse ID");
-        }
-        return this.listaAtendimentos.buscaPorId(id);
+    public boolean containsAtendimento(Integer id) {
+        return this.listaAtendimentos.containsAtendimento(id);
     }
 
     @Override
