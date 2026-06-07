@@ -73,7 +73,7 @@ public class AtendimentoRepository {
                 String nome = rs.getString("nome");
                 int idade =  LocalDate.now().getYear() - rs.getInt("nascimento");
                 Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
-                return new Atendimento(new ClienteDiario(nome, idade, cpf, sexo));
+                return new Atendimento(id, new ClienteDiario(nome, idade, cpf, sexo));
 
             } else {
                 throw new IllegalArgumentException("Nenhum atendimento encontrado com esse ID");
@@ -119,7 +119,7 @@ public class AtendimentoRepository {
                     int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
                     Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
 
-                    Atendimento atendimento = new Atendimento(new ClienteDiario(nome, idade, cpf, sexo));
+                    Atendimento atendimento = new Atendimento(id, new ClienteDiario(nome, idade, cpf, sexo));
                     lista.put(id, atendimento);
                 }
                 lista.get(id).adicionarServico(Servico.valueOf(rs.getString("servico")));
