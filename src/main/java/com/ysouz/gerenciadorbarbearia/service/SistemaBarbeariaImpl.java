@@ -1,20 +1,19 @@
 package com.ysouz.gerenciadorbarbearia.service;
 
 import com.ysouz.gerenciadorbarbearia.model.*;
-import com.ysouz.gerenciadorbarbearia.repository.ClienteDiarioRepository;
-import com.ysouz.gerenciadorbarbearia.repository.AtendimentoRepository;
+import com.ysouz.gerenciadorbarbearia.repository.*;
 
 import java.util.List;
 
 public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     private ClienteDiarioRepository listaClientes;
     private AtendimentoRepository listaAtendimentos;
-    private Estatisticas estatisticas;
+    private EstatisticasRepository estatisticas;
 
     public SistemaBarbeariaImpl() {
         this.listaClientes = new ClienteDiarioRepository();
         this.listaAtendimentos = new AtendimentoRepository();
-        this.estatisticas = new Estatisticas();
+        this.estatisticas = new EstatisticasRepository();
     }
 
     public Pessoa buscaClientePorCpf(String cpf) {
@@ -34,7 +33,6 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
             throw new IllegalArgumentException("O sistema já possui um cliente cadastrado com esse CPF");
         }
         this.listaClientes.salvar(pessoa);
-        this.estatisticas.incrementarCliente();
     }
 
     @Override
@@ -49,8 +47,6 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
             ((ClienteDiario) atendimento.getPessoa()).aumentarAtendimento();
         }
         this.listaAtendimentos.salvar(atendimento);
-        this.estatisticas.incrementarAtendimento();
-        this.estatisticas.adicionarValorFaturado(atendimento.getTotal());
     }
 
     @Override
@@ -75,7 +71,6 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
             throw new IllegalArgumentException("Cliente não está cadastrado no sistema.");
         }
         this.listaClientes.remover(cpf);
-        this.estatisticas.decrementarCliente();
     }
 
     @Override
@@ -84,14 +79,12 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
             throw new IllegalArgumentException("Atendimento não está cadastrado no sistema.");
         }
         this.listaAtendimentos.remover(id);
-        this.estatisticas.removerValorFaturado(this.listaAtendimentos.buscaPorId(id).getTotal());
-        this.estatisticas.decrementarAtendimento();
     }
 
     @Override
     public String estatisticas() {
-        return "Total de clientes: " + this.estatisticas.getTotalClientes() +
-                "\nTotal de Atendimentos: " + this.estatisticas.getTotalAtendimentos() +
-                "\nTotal faturado: R$ " + this.estatisticas.getTotalFaturado();
+        return "Total de clientes: " + this.estatisticas.totalClientes() +
+                "\nTotal de Atendimentos: " + this.estatisticas.totalAtendimentos() +
+                "\nTotal faturado: R$ " + this.estatisticas.totalFaturado();
     }
 }
