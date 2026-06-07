@@ -23,12 +23,12 @@ public class Atendimento {
 
     public void adicionarServico(Servico servico) {
         Servico.isServico(servico);
-        if (containsServico(servicosRealizados, servico)) {
+        if (containsServico(this.servicosRealizados, servico)) {
             throw new IllegalArgumentException("Esse serviço já foi registrado nesse atendimento.");
         }
 
         this.totalServico = this.totalServico.add(servico.getValor());
-        servicosRealizados.add(servico);
+        this.servicosRealizados.add(servico);
     }
 
     public String resumo() {
@@ -56,13 +56,6 @@ public class Atendimento {
 
     public BigDecimal getTotal() {
         return this.totalServico;
-    }
-
-    public void setTotal(BigDecimal novoTotal) {
-        if (novoTotal.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("O novo total do servico não pode ser menor ou igual a 0");
-        }
-        this.totalServico = novoTotal;
     }
 
     private static boolean containsServico(ArrayList<Servico> lista, Servico servico) {

@@ -5,6 +5,7 @@ import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.*;
 import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -96,7 +97,7 @@ public class AtendimentoRepository {
     }
 
     public List<Atendimento> listaDeAtendimento() {
-        String query = "SELECT ate.id, cl.*, sv.nome as servico, ate.valor FROM atendimentos_servicos as ates " +
+        String query = "SELECT ate.id, cl.*, sv.nome as servico FROM atendimentos_servicos as ates " +
                         "JOIN atendimentos as ate " +
                         "ON ate.id = ates.id_atendimento " +
                         "JOIN clientes as cl " +
@@ -117,8 +118,8 @@ public class AtendimentoRepository {
                     String cpf = rs.getString("cpf");
                     int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
                     Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
+
                     Atendimento atendimento = new Atendimento(new ClienteDiario(nome, idade, cpf, sexo));
-                    atendimento.setTotal(rs.getBigDecimal("valor"));
                     lista.put(id, atendimento);
                 }
                 lista.get(id).adicionarServico(Servico.valueOf(rs.getString("servico")));
