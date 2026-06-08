@@ -5,7 +5,6 @@ import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.*;
 import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -20,8 +19,12 @@ import java.util.ArrayList;
 public class AtendimentoRepository {
 
     public void salvar(Atendimento atendimento) {
+        // query de inserção de atendimento
         String query = "INSERT INTO atendimentos(cliente_cpf, valor) VALUES (?, ?) ";
+
+        // query que incrementa atendimento ao total de atendimentos do cliente
         String queryTotalAtendimento = "UPDATE clientes SET total_atendimentos = total_atendimentos + 1 WHERE cpf = ?";
+
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             PreparedStatement statementTotalAtendimento = conexao.prepareStatement(queryTotalAtendimento)) {
@@ -35,7 +38,11 @@ public class AtendimentoRepository {
 
             try (ResultSet rs = statement.getGeneratedKeys()) {
                 if (rs.next()) {
+
+                    // query que faz a associacao das tabelas atendimento e servicos
                     String query2 = "INSERT INTO atendimentos_servicos(id_atendimento, id_servico) VALUES (?, ?)";
+
+                    // id do atendimento que esta sendo salvo
                     int idAtendimento = rs.getInt(1);
 
                     for (Servico servico : atendimento.getServicosRealizados()) {
@@ -53,8 +60,13 @@ public class AtendimentoRepository {
     }
 
     public void remover(Integer id) {
+        // query que deleta atendimentos
         String query = "DELETE FROM atendimentos WHERE id = ?";
+
+        // query que deleta da tabela intermediária atendimentos_servicos
         String query2 = "DELETE FROM atendimentos_servicos WHERE id_atendimento = ?";
+
+        // query que decrementa do total de atendimentos do cliente
         String query3 = "UPDATE clientes " +
                         "SET total_atendimentos = total_atendimentos - 1 " +
                         "WHERE cpf = (SELECT cliente_cpf from atendimentos WHERE id = ?)";

@@ -33,8 +33,14 @@ public class ClienteDiarioRepository {
     }
 
     public void remover(String cpf) {
+
+        // query que remove o cliente
         String query = "DELETE FROM clientes WHERE cpf = ?";
+
+        //query que remove o atendimento referente ao cliente
         String queryDeleteAtendimentos = "DELETE FROM atendimentos WHERE cliente_cpf = ?";
+
+        // query que remove o dado referente ao atendimento/servico da tabela intermediária
         String queryDeleteAtendimentosServicos = "DELETE FROM atendimentos_servicos " +
                                                  "WHERE id_atendimento IN (" +
                                                  "SELECT id FROM atendimentos WHERE cliente_cpf = ?)";
