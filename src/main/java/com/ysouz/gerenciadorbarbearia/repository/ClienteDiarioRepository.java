@@ -34,9 +34,21 @@ public class ClienteDiarioRepository {
 
     public void remover(String cpf) {
         String query = "DELETE FROM clientes WHERE cpf = ?";
+        String queryDeleteAtendimentos = "DELETE FROM atendimentos WHERE cliente_cpf = ?";
+        String queryDeleteAtendimentosServicos = "DELETE FROM atendimentos_servicos " +
+                                                 "WHERE id_atendimento IN (" +
+                                                 "SELECT id FROM atendimentos WHERE cliente_cpf = ?)";
 
         try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query)){
+            PreparedStatement statement = conexao.prepareStatement(query);
+            PreparedStatement statementDeleteAtendimentos = conexao.prepareStatement(queryDeleteAtendimentos);
+            PreparedStatement statementDeleteAtendimentosServicos = conexao.prepareStatement(queryDeleteAtendimentosServicos)){
+
+            statementDeleteAtendimentosServicos.setString(1, cpf);
+            statementDeleteAtendimentosServicos.executeUpdate();
+
+            statementDeleteAtendimentos.setString(1, cpf);
+            statementDeleteAtendimentos.executeUpdate();
 
             statement.setString(1, cpf);
             statement.executeUpdate();
