@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface SistemaBarbearia {
+    public Pessoa buscaClientePorCpf(String cpf);
+
+    public boolean containsAtendimento(Integer id);
+
     public void cadastrarCliente(Pessoa pessoa);
 
     public void cadastrarAtendimento(Atendimento atendimento);
