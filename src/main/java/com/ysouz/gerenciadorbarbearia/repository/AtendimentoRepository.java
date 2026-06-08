@@ -55,14 +55,24 @@ public class AtendimentoRepository {
     public void remover(Integer id) {
         String query = "DELETE FROM atendimentos WHERE id = ?";
         String query2 = "DELETE FROM atendimentos_servicos WHERE id_atendimento = ?";
+        String query3 = "UPDATE clientes " +
+                        "SET total_atendimentos = total_atendimentos - 1 " +
+                        "WHERE cpf = (SELECT cliente_cpf from atendimentos WHERE id = ?)";
+
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query);
-            PreparedStatement statement2 = conexao.prepareStatement(query2)) {
+            PreparedStatement statement2 = conexao.prepareStatement(query2);
+            PreparedStatement statement3 = conexao.prepareStatement(query3)) {
+
+            statement3.setInt(1, id);
+            statement3.executeUpdate();
+
             statement2.setInt(1, id);
             statement2.executeUpdate();
 
             statement.setInt(1, id);
             statement.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao remover atendimento: " + e.getMessage());
         }
