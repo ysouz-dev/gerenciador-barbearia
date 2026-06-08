@@ -1,7 +1,7 @@
 package com.ysouz.gerenciadorbarbearia.controller;
 
 import com.ysouz.gerenciadorbarbearia.util.*;
-import com.ysouz.gerenciadorbarbearia.service.SistemaBarbeariaImpl;
+import com.ysouz.gerenciadorbarbearia.service.*;
 import com.ysouz.gerenciadorbarbearia.model.*;
 import com.ysouz.gerenciadorbarbearia.enums.*;
 
@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public final class Menu {
     private final Scanner scanner;
-    private final SistemaBarbeariaImpl sistema;
+    private final SistemaBarbearia sistema;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
