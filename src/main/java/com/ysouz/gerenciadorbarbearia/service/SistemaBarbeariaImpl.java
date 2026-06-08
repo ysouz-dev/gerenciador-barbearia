@@ -37,14 +37,8 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public void cadastrarAtendimento(Atendimento atendimento) {
-        if (this.listaAtendimentos.containsAtendimento(atendimento.getId())) {
-            throw new IllegalArgumentException("O sistema já possui esse atendimento cadastrado.");
-        }
         if (atendimento.getServicosRealizados().isEmpty()) {
             throw new IllegalArgumentException("Não é possivel cadastrar um atendimento sem serviços realizados.");
-        }
-        if (atendimento.getPessoa() instanceof ClienteDiario) {
-            ((ClienteDiario) atendimento.getPessoa()).aumentarAtendimento();
         }
         this.listaAtendimentos.salvar(atendimento);
     }
