@@ -5,6 +5,7 @@ import com.ysouz.gerenciadorbarbearia.enums.Servico;
 import java.util.List;
 import java.util.ArrayList;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Atendimento {
 
@@ -14,6 +15,9 @@ public class Atendimento {
     private Pessoa cliente;
 
     public Atendimento(Pessoa cliente) {
+        if (Objects.isNull(cliente)){
+            throw new IllegalArgumentException("O cliente não pode ser nulo.");
+        }
         this.servicosRealizados = new ArrayList<Servico>();
         this.cliente = cliente;
         this.id = null;
