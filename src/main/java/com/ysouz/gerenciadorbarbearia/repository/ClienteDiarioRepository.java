@@ -99,7 +99,13 @@ public class ClienteDiarioRepository {
                 int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
                 Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
 
-                lista.add(new ClienteDiario(nome, idade, cpf, sexo));
+                ClienteDiario cliente = new ClienteDiario(nome, idade, cpf, sexo);
+
+                for (int i = 0; i < rs.getInt("total_atendimentos"); i++) {
+                    cliente.aumentarAtendimento();
+                }
+
+                lista.add(cliente);
             }
             return lista;
 

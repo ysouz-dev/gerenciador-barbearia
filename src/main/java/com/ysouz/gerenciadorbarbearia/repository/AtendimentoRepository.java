@@ -5,6 +5,7 @@ import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.*;
 import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -20,11 +21,17 @@ public class AtendimentoRepository {
 
     public void salvar(Atendimento atendimento) {
         String query = "INSERT INTO atendimentos(cliente_cpf, valor) VALUES (?, ?) ";
+        String queryTotalAtendimento = "UPDATE clientes SET total_atendimentos = total_atendimentos + 1 WHERE cpf = ?";
         try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement statement = conexao.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statementTotalAtendimento = conexao.prepareStatement(queryTotalAtendimento)) {
+
             statement.setString(1, atendimento.getPessoa().getCPF());
             statement.setBigDecimal(2, atendimento.getTotal());
             statement.executeUpdate();
+
+            statementTotalAtendimento.setString(1, atendimento.getPessoa().getCPF());
+            statementTotalAtendimento.executeUpdate();
 
             try (ResultSet rs = statement.getGeneratedKeys()) {
                 if (rs.next()) {
