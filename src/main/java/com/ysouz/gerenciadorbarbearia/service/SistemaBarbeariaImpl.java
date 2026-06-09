@@ -1,100 +1,88 @@
 package com.ysouz.gerenciadorbarbearia.service;
 
 import com.ysouz.gerenciadorbarbearia.model.*;
-import com.ysouz.gerenciadorbarbearia.repository.ClienteDiarioRepository;
-import com.ysouz.gerenciadorbarbearia.repository.AtendimentoRepository;
+import com.ysouz.gerenciadorbarbearia.repository.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     private ClienteDiarioRepository listaClientes;
     private AtendimentoRepository listaAtendimentos;
-    private Estatisticas estatisticas;
+    private EstatisticasRepository estatisticas;
 
     public SistemaBarbeariaImpl() {
         this.listaClientes = new ClienteDiarioRepository();
         this.listaAtendimentos = new AtendimentoRepository();
-        this.estatisticas = new Estatisticas();
+        this.estatisticas = new EstatisticasRepository();
     }
 
+    @Override
     public Pessoa buscaClientePorCpf(String cpf) {
-        if (!this.listaClientes.getLista().containsKey(cpf)) {
+        if (!this.listaClientes.containsCliente(cpf)) {
             throw new IllegalArgumentException("O sistema não possui um cliente com esse cpf");
         }
         return this.listaClientes.buscaPorCpf(cpf);
     }
 
-    public Atendimento buscaAtendimentoPorId(Integer id) {
-        if (!this.listaAtendimentos.getLista().containsKey(id)) {
-            throw new IllegalArgumentException("O sistema não possui um atendimento com esse ID");
-        }
-        return this.listaAtendimentos.buscaPorId(id);
+    @Override
+    public boolean containsAtendimento(Integer id) {
+        return this.listaAtendimentos.containsAtendimento(id);
     }
 
     @Override
     public void cadastrarCliente(Pessoa pessoa) {
-        if (this.listaClientes.containsPessoa(pessoa.getCPF())) {
+        if (this.listaClientes.containsCliente(pessoa.getCPF())) {
             throw new IllegalArgumentException("O sistema já possui um cliente cadastrado com esse CPF");
         }
         this.listaClientes.salvar(pessoa);
-        this.estatisticas.incrementarCliente();
     }
 
     @Override
     public void cadastrarAtendimento(Atendimento atendimento) {
-        if (this.listaAtendimentos.containsAtendimento(atendimento.getId())) {
-            throw new IllegalArgumentException("O sistema já possui esse atendimento cadastrado.");
-        }
         if (atendimento.getServicosRealizados().isEmpty()) {
             throw new IllegalArgumentException("Não é possivel cadastrar um atendimento sem serviços realizados.");
         }
-        if (atendimento.getPessoa() instanceof ClienteDiario) {
-            ((ClienteDiario) atendimento.getPessoa()).aumentarAtendimento();
-        }
         this.listaAtendimentos.salvar(atendimento);
-        this.estatisticas.incrementarAtendimento();
-        this.estatisticas.adicionarValorFaturado(atendimento.getTotal());
     }
 
     @Override
-    public ArrayList<Pessoa> listarClientes() {
-        if (this.listaClientes.getLista().isEmpty()) {
+    public List<Pessoa> listarClientes() {
+        List<Pessoa> lista = this.listaClientes.listaDeClientes();
+        if (lista.isEmpty()) {
             throw new IllegalStateException("Nenhum cliente cadastrado no sistema.");
         }
-        return this.listaClientes.listaDePessoas();
+        return lista;
     }
 
     @Override
-    public ArrayList<Atendimento> listarAtendimentos() {
-        if (this.listaAtendimentos.getLista().isEmpty()) {
+    public List<Atendimento> listarAtendimentos() {
+        List<Atendimento> lista = this.listaAtendimentos.listaDeAtendimento();
+        if (lista.isEmpty()) {
             throw new IllegalStateException("Nenhum atendimento cadastrado no sistema.");
         }
-        return this.listaAtendimentos.listaDeAtendimento();
+        return lista;
     }
 
     @Override
-    public void removerCliente(Pessoa pessoa) {
-        if (!this.listaClientes.containsPessoa(pessoa.getCPF())) {
+    public void removerCliente(String cpf) {
+        if (!this.listaClientes.containsCliente(cpf)){
             throw new IllegalArgumentException("Cliente não está cadastrado no sistema.");
         }
-        this.listaClientes.remover(pessoa.getCPF());
-        this.estatisticas.decrementarCliente();
+        this.listaClientes.remover(cpf);
     }
 
     @Override
-    public void removerAtendimento(Atendimento atendimento) {
-        if (!this.listaAtendimentos.containsAtendimento(atendimento.getId())) {
+    public void removerAtendimento(Integer id) {
+        if (!this.listaAtendimentos.containsAtendimento(id)) {
             throw new IllegalArgumentException("Atendimento não está cadastrado no sistema.");
         }
-        this.listaAtendimentos.remover(atendimento.getId());
-        this.estatisticas.removerValorFaturado(atendimento.getTotal());
-        this.estatisticas.decrementarAtendimento();
+        this.listaAtendimentos.remover(id);
     }
 
     @Override
     public String estatisticas() {
-        return "Total de clientes: " + this.estatisticas.getTotalClientes() +
-                "\nTotal de Atendimentos: " + this.estatisticas.getTotalAtendimentos() +
-                "\nTotal faturado: R$ " + this.estatisticas.getTotalFaturado();
+        return "Total de clientes: " + this.estatisticas.totalClientes() +
+                "\nTotal de Atendimentos: " + this.estatisticas.totalAtendimentos() +
+                "\nTotal faturado: R$ " + this.estatisticas.totalFaturado();
     }
 }

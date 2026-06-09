@@ -24,6 +24,10 @@ public enum Sexo {
         throw new IllegalArgumentException("Sexo inválido!");
     }
 
+    public String getNomeSexo() {
+        return this.nome;
+    }
+
     public static void isSexo(Sexo sexo) {
         if (Objects.isNull(sexo)) {
             throw new IllegalArgumentException("Sexo inválido!");

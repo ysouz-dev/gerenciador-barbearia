@@ -2,33 +2,43 @@ package com.ysouz.gerenciadorbarbearia.model;
 
 import com.ysouz.gerenciadorbarbearia.enums.Servico;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Atendimento {
-    private static int idGeral = 1;
 
-    private int id;
-    private ArrayList<Servico> servicosRealizados;
+    private Integer id;
+    private List<Servico> servicosRealizados;
     private BigDecimal totalServico;
     private Pessoa cliente;
 
     public Atendimento(Pessoa cliente) {
+        if (Objects.isNull(cliente)){
+            throw new IllegalArgumentException("O cliente não pode ser nulo.");
+        }
         this.servicosRealizados = new ArrayList<Servico>();
         this.cliente = cliente;
-        this.id = idGeral;
+        this.id = null;
         this.totalServico = BigDecimal.ZERO;
-        idGeral++;
+    }
+
+    public Atendimento(Integer id, Pessoa cliente) {
+        this.servicosRealizados = new ArrayList<>();
+        this.id = id;
+        this.cliente = cliente;
+        this.totalServico = BigDecimal.ZERO;
     }
 
     public void adicionarServico(Servico servico) {
         Servico.isServico(servico);
-        if (containsServico(servicosRealizados, servico)) {
+        if (containsServico(this.servicosRealizados, servico)) {
             throw new IllegalArgumentException("Esse serviço já foi registrado nesse atendimento.");
         }
 
         this.totalServico = this.totalServico.add(servico.getValor());
-        servicosRealizados.add(servico);
+        this.servicosRealizados.add(servico);
     }
 
     public String resumo() {
@@ -58,7 +68,7 @@ public class Atendimento {
         return this.totalServico;
     }
 
-    private static boolean containsServico(ArrayList<Servico> lista, Servico servico) {
+    private static boolean containsServico(List<Servico> lista, Servico servico) {
         for (Servico service : lista) {
             if (servico == service) {
                 return true;
