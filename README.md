@@ -68,7 +68,9 @@ git clone https://github.com/ysouz-dev/gerenciador-barbearia
 ```
 
 **2. Configure o banco de dados conforme as instruções acima**
+
 **3. Abra o projeto no IntelliJ IDEA como projeto Maven**
+
 **4. Execute a classe `Main.JAVA`**
 
 ## 🚀 Objetivo
