@@ -98,18 +98,20 @@ public class AtendimentoRepository {
 
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query)) {
+
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery();
 
-            if (rs.next()) {
-                String cpf = rs.getString("cpf");
-                String nome = rs.getString("nome");
-                int idade =  LocalDate.now().getYear() - rs.getInt("nascimento");
-                Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
-                return new Atendimento(id, new ClienteDiario(nome, idade, cpf, sexo));
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    String cpf = rs.getString("cpf");
+                    String nome = rs.getString("nome");
+                    int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
+                    Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
+                    return new Atendimento(id, new ClienteDiario(nome, idade, cpf, sexo));
 
-            } else {
-                throw new IllegalArgumentException("Nenhum atendimento encontrado com esse ID");
+                } else {
+                    throw new IllegalArgumentException("Nenhum atendimento encontrado com esse ID");
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar atendimento: " + e.getMessage());
@@ -120,9 +122,12 @@ public class AtendimentoRepository {
         String query = "SELECT id FROM atendimentos WHERE id = ?";
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query)) {
+
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery();
-            return rs.next();
+
+            try (ResultSet rs = statement.executeQuery()) {
+                return rs.next();
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao verificar se atendimento está no banco: " + e.getMessage());
@@ -139,8 +144,8 @@ public class AtendimentoRepository {
                         "ON sv.id = ates.id_servico";
 
         try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query)) {
-            ResultSet rs = statement.executeQuery();
+            PreparedStatement statement = conexao.prepareStatement(query);
+            ResultSet rs = statement.executeQuery()) {
 
             Map<Integer, Atendimento> lista = new HashMap<>();
             while (rs.next()) {

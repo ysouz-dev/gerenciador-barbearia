@@ -13,8 +13,9 @@ public class EstatisticasRepository {
     public int totalClientes() {
         String query = "SELECT count(*) as total from clientes";
         try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query)) {
-            ResultSet rs = statement.executeQuery();
+            PreparedStatement statement = conexao.prepareStatement(query);
+            ResultSet rs = statement.executeQuery()) {
+
             if (rs.next()) {
                 return rs.getInt("total");
             }
@@ -27,8 +28,9 @@ public class EstatisticasRepository {
     public int totalAtendimentos() {
         String query = "SELECT count(*) as total from atendimentos";
         try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query)) {
-            ResultSet rs = statement.executeQuery();
+            PreparedStatement statement = conexao.prepareStatement(query);
+            ResultSet rs = statement.executeQuery()) {
+
             if (rs.next()) {
                 return rs.getInt("total");
             }
@@ -41,8 +43,9 @@ public class EstatisticasRepository {
     public BigDecimal totalFaturado() {
         String query = "SELECT coalesce(sum(valor), 0) as total from atendimentos";
         try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query)) {
-            ResultSet rs = statement.executeQuery();
+            PreparedStatement statement = conexao.prepareStatement(query);
+            ResultSet rs = statement.executeQuery()) {
+
             if (rs.next()) {
                 return rs.getBigDecimal("total");
             }

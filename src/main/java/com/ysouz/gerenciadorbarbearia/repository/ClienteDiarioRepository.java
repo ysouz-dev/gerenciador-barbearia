@@ -71,17 +71,19 @@ public class ClienteDiarioRepository {
             PreparedStatement statement = conexao.prepareStatement(query)){
 
             statement.setString(1, cpf);
-            ResultSet rs = statement.executeQuery();
 
-            if (rs.next()) {
-                String nome = rs.getString("nome");
-                int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
-                String ClienteCPF = rs.getString("cpf");
-                Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
-                return new ClienteDiario(nome, idade, ClienteCPF, sexo);
+            try (ResultSet rs = statement.executeQuery()) {
 
-            } else {
-                throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf");
+                if (rs.next()) {
+                    String nome = rs.getString("nome");
+                    int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
+                    String ClienteCPF = rs.getString("cpf");
+                    Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
+                    return new ClienteDiario(nome, idade, ClienteCPF, sexo);
+
+                } else {
+                    throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf");
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar cliente no banco: " + e.getMessage());
@@ -93,10 +95,11 @@ public class ClienteDiarioRepository {
 
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query)) {
-
             statement.setString(1, cpf);
-            ResultSet rs = statement.executeQuery();
-            return rs.next();
+
+            try (ResultSet rs = statement.executeQuery()) {
+                return rs.next();
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao verificar se existe cliente no banco: " + e.getMessage());
@@ -107,9 +110,9 @@ public class ClienteDiarioRepository {
         String query = "SELECT * FROM clientes";
 
         try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query)){
+            PreparedStatement statement = conexao.prepareStatement(query);
+            ResultSet rs = statement.executeQuery()){
 
-            ResultSet rs = statement.executeQuery();
             List<Pessoa> lista = new ArrayList<>();
             while (rs.next()) {
                 String nome = rs.getString("nome");
