@@ -2,7 +2,6 @@ package com.ysouz.gerenciadorbarbearia.service;
 
 import com.ysouz.gerenciadorbarbearia.model.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
