@@ -47,18 +47,20 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
 
     @Override
     public List<Pessoa> listarClientes() {
-        if (this.listaClientes.listaDeClientes().isEmpty()) {
+        List<Pessoa> lista = this.listaClientes.listaDeClientes();
+        if (lista.isEmpty()) {
             throw new IllegalStateException("Nenhum cliente cadastrado no sistema.");
         }
-        return this.listaClientes.listaDeClientes();
+        return lista;
     }
 
     @Override
     public List<Atendimento> listarAtendimentos() {
-        if (this.listaAtendimentos.listaDeAtendimento().isEmpty()) {
+        List<Atendimento> lista = this.listaAtendimentos.listaDeAtendimento();
+        if (lista.isEmpty()) {
             throw new IllegalStateException("Nenhum atendimento cadastrado no sistema.");
         }
-        return this.listaAtendimentos.listaDeAtendimento();
+        return lista;
     }
 
     @Override
