@@ -9,6 +9,11 @@ public class ClienteDiario extends Pessoa {
         this.totalAtendimentos = 0;
     }
 
+    public ClienteDiario(String nome, int idade, String cpf, Sexo sexo, int totalAtendimentos) {
+        super(nome, idade, cpf, sexo);
+        this.totalAtendimentos = totalAtendimentos;
+    }
+
     public void aumentarAtendimento() {
         this.totalAtendimentos++;
     }
