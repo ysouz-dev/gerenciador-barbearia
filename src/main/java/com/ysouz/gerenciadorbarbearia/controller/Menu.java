@@ -1,7 +1,7 @@
 package com.ysouz.gerenciadorbarbearia.controller;
 
 import com.ysouz.gerenciadorbarbearia.util.*;
-import com.ysouz.gerenciadorbarbearia.service.SistemaBarbeariaImpl;
+import com.ysouz.gerenciadorbarbearia.service.*;
 import com.ysouz.gerenciadorbarbearia.model.*;
 import com.ysouz.gerenciadorbarbearia.enums.*;
 
@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public final class Menu {
     private final Scanner scanner;
-    private final SistemaBarbeariaImpl sistema;
+    private final SistemaBarbearia sistema;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
@@ -238,9 +238,8 @@ public final class Menu {
         }
 
         // verifica se existe cliente com esse cpf no sistema
-        Pessoa cliente;
         try {
-            cliente = this.sistema.buscaClientePorCpf(cpf);
+            this.sistema.buscaClientePorCpf(cpf);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return;
@@ -248,7 +247,7 @@ public final class Menu {
 
         // remove cliente do sistema
         try {
-            this.sistema.removerCliente(cliente);
+            this.sistema.removerCliente(cpf);
             System.out.println("Cliente removido!");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
@@ -276,17 +275,15 @@ public final class Menu {
             }
         }
 
-        // procura o atendimento de acordo com o id
-        Atendimento atendimento;
-        try {
-            atendimento = this.sistema.buscaAtendimentoPorId(id);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+        // verifica se existe atendimento com o ID antes de remover
+        if (!this.sistema.containsAtendimento(id)) {
+            System.out.println("Erro: Atendimento não encontrado no sistema");
             return;
         }
 
+        // remove atendimento
         try {
-            this.sistema.removerAtendimento(atendimento);
+            this.sistema.removerAtendimento(id);
             System.out.println("Atendimento removido!");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
