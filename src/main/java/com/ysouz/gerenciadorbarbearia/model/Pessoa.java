@@ -25,7 +25,7 @@ public abstract class Pessoa {
         return "Nome: " + this.nome +
                 "\nIdade: " + this.idade +
                 "\nCPF: " + this.cpf +
-                "\nSexo: " + this.sexo;
+                "\nSexo: " + this.sexo.getNomeSexo();
     }
 
     public String getNome() {
