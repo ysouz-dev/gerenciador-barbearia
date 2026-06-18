@@ -101,11 +101,11 @@ public final class Menu {
         }
 
         // leitura e validacao de sexo
-        Sexo sexo = Sexo.NAO_INFORMADO;
+        Sexo sexo;
         while (true) {
             try {
                 System.out.print("Sexo: ");
-                sexo = sexo.toSexo(this.scanner.nextLine());
+                sexo = Sexo.toSexo(this.scanner.nextLine());
                 Sexo.isSexo(sexo);
                 break;
 

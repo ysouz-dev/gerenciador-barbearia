@@ -15,17 +15,18 @@ public enum Sexo {
         this.sigla = sigla;
     }
 
-    public Sexo toSexo(String sexo) {
+
+    public String getNomeSexo() {
+        return this.nome;
+    }
+
+    public static Sexo toSexo(String sexo) {
         for (Sexo sex : Sexo.values()) {
             if (sexo.strip().equalsIgnoreCase(sex.nome) || sexo.strip().equalsIgnoreCase(sex.sigla)) {
                 return sex;
             }
         }
         throw new IllegalArgumentException("Sexo inválido!");
-    }
-
-    public String getNomeSexo() {
-        return this.nome;
     }
 
     public static void isSexo(Sexo sexo) {
