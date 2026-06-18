@@ -5,7 +5,7 @@ public class AtendimentosNaoEncontradosException extends RuntimeException {
         super(message);
     }
 
-    public AtendimentosNaoEncontradosException() {
-        super("Nenhum atendimento foi encontrado.");
+    public AtendimentosNaoEncontradosException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

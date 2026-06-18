@@ -5,7 +5,7 @@ public class AtendimentoSemServicoException extends RuntimeException {
         super(message);
     }
 
-    public AtendimentoSemServicoException() {
-        super("Atendimento sem serviços não podem ser cadastrados.");
+    public AtendimentoSemServicoException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

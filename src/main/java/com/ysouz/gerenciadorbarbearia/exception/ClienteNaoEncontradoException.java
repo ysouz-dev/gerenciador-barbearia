@@ -6,7 +6,7 @@ public class ClienteNaoEncontradoException extends RuntimeException{
         super(message);
     }
 
-    public ClienteNaoEncontradoException() {
-        super("Cliente não encontrado.");
+    public ClienteNaoEncontradoException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

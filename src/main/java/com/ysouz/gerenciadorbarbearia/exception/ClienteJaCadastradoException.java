@@ -5,7 +5,7 @@ public class ClienteJaCadastradoException extends RuntimeException {
         super(message);
     }
 
-    public ClienteJaCadastradoException() {
-        super("Cliente já cadastrado.");
+    public ClienteJaCadastradoException(String message, Throwable cause) {
+        super(message, cause);
     }
 }
