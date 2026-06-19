@@ -4,7 +4,10 @@ import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.Sexo;
+import com.ysouz.gerenciadorbarbearia.exception.ClienteNaoEncontradoException;
+import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
 
+import java.util.Objects;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,7 +31,7 @@ public class ClienteDiarioRepository {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao salvar cliente: " + e.getMessage());
+            throw new DatabaseException("Erro ao salvar cliente", e);
         }
     }
 
@@ -45,22 +48,44 @@ public class ClienteDiarioRepository {
                                                  "WHERE id_atendimento IN (" +
                                                  "SELECT id FROM atendimentos WHERE cliente_cpf = ?)";
 
-        try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query);
-            PreparedStatement statementDeleteAtendimentos = conexao.prepareStatement(queryDeleteAtendimentos);
-            PreparedStatement statementDeleteAtendimentosServicos = conexao.prepareStatement(queryDeleteAtendimentosServicos)){
+        Connection conexao = null;
+        try {
+            conexao = Conexao.getConexao();
+            conexao.setAutoCommit(false);
 
-            statementDeleteAtendimentosServicos.setString(1, cpf);
-            statementDeleteAtendimentosServicos.executeUpdate();
+            try (PreparedStatement statement = conexao.prepareStatement(query);
+                 PreparedStatement statementDeleteAtendimentos = conexao.prepareStatement(queryDeleteAtendimentos);
+                 PreparedStatement statementDeleteAtendimentosServicos = conexao.prepareStatement(queryDeleteAtendimentosServicos)) {
 
-            statementDeleteAtendimentos.setString(1, cpf);
-            statementDeleteAtendimentos.executeUpdate();
+                statementDeleteAtendimentosServicos.setString(1, cpf);
+                statementDeleteAtendimentosServicos.executeUpdate();
 
-            statement.setString(1, cpf);
-            statement.executeUpdate();
+                statementDeleteAtendimentos.setString(1, cpf);
+                statementDeleteAtendimentos.executeUpdate();
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao remover cliente: " + e.getMessage());
+                statement.setString(1, cpf);
+                statement.executeUpdate();
+
+            }
+            conexao.commit();
+
+        } catch (Exception e) {
+            if (!Objects.isNull(conexao)) {
+                try {
+                    conexao.rollback();
+                } catch (SQLException ex) {
+                    throw new DatabaseException("Erro ao realizar rollback", ex);
+                }
+            }
+            throw new DatabaseException("Erro ao remover cliente", e);
+        } finally {
+            if (!Objects.isNull(conexao)) {
+                try {
+                    conexao.close();
+                } catch (SQLException e) {
+                    System.err.println("Erro ao fechar conexão com banco de dados: " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -77,16 +102,16 @@ public class ClienteDiarioRepository {
                 if (rs.next()) {
                     String nome = rs.getString("nome");
                     int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
-                    String ClienteCPF = rs.getString("cpf");
-                    Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
-                    return new ClienteDiario(nome, idade, ClienteCPF, sexo);
+                    String clienteCPF = rs.getString("cpf");
+                    Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
+                    return new ClienteDiario(nome, idade, clienteCPF, sexo);
 
                 } else {
-                    throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf");
+                    throw new ClienteNaoEncontradoException("Nenhum cliente encontrado com esse cpf");
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar cliente no banco: " + e.getMessage());
+            throw new DatabaseException("Erro ao buscar cliente no banco", e);
         }
     }
 
@@ -102,7 +127,7 @@ public class ClienteDiarioRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao verificar se existe cliente no banco: " + e.getMessage());
+            throw new DatabaseException("Erro ao verificar se existe cliente no banco", e);
         }
     }
 
@@ -118,8 +143,7 @@ public class ClienteDiarioRepository {
                 String nome = rs.getString("nome");
                 String cpf = rs.getString("cpf");
                 int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
-                Sexo sexo = Sexo.NAO_INFORMADO;
-                sexo = sexo.toSexo(rs.getString("sexo"));
+                Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
                 int totalAtendimentos = rs.getInt("total_atendimentos");
 
                 ClienteDiario cliente = new ClienteDiario(nome, idade, cpf, sexo, totalAtendimentos);
@@ -129,7 +153,7 @@ public class ClienteDiarioRepository {
             return lista;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar lista de clientes no banco: " + e.getMessage());
+            throw new DatabaseException("Erro ao buscar lista de clientes no banco", e);
         }
     }
 }
