@@ -1,11 +1,13 @@
 package com.ysouz.gerenciadorbarbearia.repository;
 
+import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
 import com.ysouz.gerenciadorbarbearia.model.Atendimento;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.*;
 import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 import com.ysouz.gerenciadorbarbearia.exception.AtendimentoNaoEncontradoException;
 
+import java.util.Objects;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -26,37 +28,61 @@ public class AtendimentoRepository {
         // query que incrementa atendimento ao total de atendimentos do cliente
         String queryTotalAtendimento = "UPDATE clientes SET total_atendimentos = total_atendimentos + 1 WHERE cpf = ?";
 
-        try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement statementTotalAtendimento = conexao.prepareStatement(queryTotalAtendimento)) {
+        Connection conexao = null;
+        try {
+            conexao = Conexao.getConexao();
+            conexao.setAutoCommit(false);
 
-            statement.setString(1, atendimento.getPessoa().getCPF());
-            statement.setBigDecimal(2, atendimento.getTotal());
-            statement.executeUpdate();
+            try (PreparedStatement statement = conexao.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                 PreparedStatement statementTotalAtendimento = conexao.prepareStatement(queryTotalAtendimento)) {
 
-            statementTotalAtendimento.setString(1, atendimento.getPessoa().getCPF());
-            statementTotalAtendimento.executeUpdate();
+                statement.setString(1, atendimento.getPessoa().getCPF());
+                statement.setBigDecimal(2, atendimento.getTotal());
+                statement.executeUpdate();
 
-            try (ResultSet rs = statement.getGeneratedKeys()) {
-                if (rs.next()) {
+                statementTotalAtendimento.setString(1, atendimento.getPessoa().getCPF());
+                statementTotalAtendimento.executeUpdate();
 
-                    // query que faz a associacao das tabelas atendimento e servicos
-                    String query2 = "INSERT INTO atendimentos_servicos(id_atendimento, id_servico) VALUES (?, ?)";
+                try (ResultSet rs = statement.getGeneratedKeys()) {
+                    if (rs.next()) {
 
-                    // id do atendimento que esta sendo salvo
-                    int idAtendimento = rs.getInt(1);
+                        // query que faz a associacao das tabelas atendimento e servicos
+                        String query2 = "INSERT INTO atendimentos_servicos(id_atendimento, id_servico) VALUES (?, ?)";
 
-                    for (Servico servico : atendimento.getServicosRealizados()) {
-                        try (PreparedStatement statement2 = conexao.prepareStatement(query2)){
-                            statement2.setInt(1, idAtendimento);
-                            statement2.setInt(2, List.of(Servico.values()).indexOf(servico) + 1);
-                            statement2.executeUpdate();
+                        // id do atendimento que esta sendo salvo
+                        int idAtendimento = rs.getInt(1);
+
+                        try (PreparedStatement statement2 = conexao.prepareStatement(query2)) {
+                            for (Servico servico : atendimento.getServicosRealizados()) {
+                                statement2.setInt(1, idAtendimento);
+                                statement2.setInt(2, List.of(Servico.values()).indexOf(servico) + 1);
+                                statement2.addBatch();
+                            }
+                            statement2.executeBatch();
                         }
                     }
                 }
+                conexao.commit();
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao salvar atendimento: " + e.getMessage());
+
+        } catch (Exception e) {
+            if (!Objects.isNull(conexao)) {
+                try {
+                    conexao.rollback();
+                } catch (SQLException ex) {
+                    throw new DatabaseException("Erro ao realizar rollback", ex);
+                }
+            }
+            throw new DatabaseException("Erro ao salvar atendimento", e);
+
+        } finally {
+            if (!Objects.isNull(conexao)) {
+                try {
+                    conexao.close();
+                } catch (SQLException e) {
+                    System.err.println("Erro ao fechar conexão com banco de dados: " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -72,22 +98,43 @@ public class AtendimentoRepository {
                         "SET total_atendimentos = total_atendimentos - 1 " +
                         "WHERE cpf = (SELECT cliente_cpf from atendimentos WHERE id = ?)";
 
-        try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query);
-            PreparedStatement statement2 = conexao.prepareStatement(query2);
-            PreparedStatement statement3 = conexao.prepareStatement(query3)) {
+        Connection conexao = null;
+        try {
+            conexao = Conexao.getConexao();
+            conexao.setAutoCommit(false);
+            try (PreparedStatement statement = conexao.prepareStatement(query);
+                 PreparedStatement statement2 = conexao.prepareStatement(query2);
+                 PreparedStatement statement3 = conexao.prepareStatement(query3)) {
 
-            statement3.setInt(1, id);
-            statement3.executeUpdate();
+                statement3.setInt(1, id);
+                statement3.executeUpdate();
 
-            statement2.setInt(1, id);
-            statement2.executeUpdate();
+                statement2.setInt(1, id);
+                statement2.executeUpdate();
 
-            statement.setInt(1, id);
-            statement.executeUpdate();
+                statement.setInt(1, id);
+                statement.executeUpdate();
+            }
+            conexao.commit();
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao remover atendimento: " + e.getMessage());
+        } catch (Exception e) {
+            if (!Objects.isNull(conexao)) {
+                try {
+                    conexao.rollback();
+                } catch (SQLException ex) {
+                    throw new DatabaseException("Erro ao realizar rollback", ex);
+                }
+            }
+            throw new DatabaseException("Erro ao remover atendimento: ", e);
+
+        } finally {
+            if (!Objects.isNull(conexao)) {
+                try {
+                    conexao.close();
+                } catch (SQLException e) {
+                    System.err.println("Erro ao fechar conexão com banco de dados: " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -120,7 +167,7 @@ public class AtendimentoRepository {
     }
 
     public boolean containsAtendimento(Integer id) {
-        String query = "SELECT id FROM atendimentos WHERE id = ?";
+        String query = "SELECT 1 FROM atendimentos WHERE id = ?";
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query)) {
 
