@@ -31,7 +31,7 @@ public class ClienteDiarioRepository {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao salvar cliente: " + e.getMessage());
+            throw new DatabaseException("Erro ao salvar cliente", e);
         }
     }
 
@@ -111,7 +111,7 @@ public class ClienteDiarioRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar cliente no banco: " + e.getMessage());
+            throw new DatabaseException("Erro ao buscar cliente no banco", e);
         }
     }
 
@@ -127,7 +127,7 @@ public class ClienteDiarioRepository {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao verificar se existe cliente no banco: " + e.getMessage());
+            throw new DatabaseException("Erro ao verificar se existe cliente no banco", e);
         }
     }
 
@@ -153,7 +153,7 @@ public class ClienteDiarioRepository {
             return lista;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar lista de clientes no banco: " + e.getMessage());
+            throw new DatabaseException("Erro ao buscar lista de clientes no banco", e);
         }
     }
 }
