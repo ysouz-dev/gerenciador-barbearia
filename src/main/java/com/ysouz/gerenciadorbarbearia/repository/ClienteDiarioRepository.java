@@ -83,7 +83,7 @@ public class ClienteDiarioRepository {
                 try {
                     conexao.close();
                 } catch (SQLException e) {
-                    System.err.println("Erro ao fechar conexao" + e.getMessage());
+                    System.err.println("Erro ao fechar conexão com banco de dados: " + e.getMessage());
                 }
             }
         }
