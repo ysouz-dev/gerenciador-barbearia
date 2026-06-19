@@ -54,7 +54,7 @@ Properties
 
 database.url = jdbc:mysql://localhost:3306/seu_banco
 database.user = seu_usuario
-data.pass = sua_senha
+database.pass = sua_senha
 ```
 
 > O arquivo `database.properties` está no `gitignore` e não é versionado por conter dados sensíveis.
@@ -71,7 +71,7 @@ git clone https://github.com/ysouz-dev/gerenciador-barbearia
 
 **3. Abra o projeto no IntelliJ IDEA como projeto Maven**
 
-**4. Execute a classe `Main.JAVA`**
+**4. Execute a classe `Main.java`**
 
 ## 🚀 Objetivo
 
