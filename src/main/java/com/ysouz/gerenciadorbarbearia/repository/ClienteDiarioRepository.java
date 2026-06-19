@@ -66,8 +66,8 @@ public class ClienteDiarioRepository {
                 statement.setString(1, cpf);
                 statement.executeUpdate();
 
-                conexao.commit();
             }
+            conexao.commit();
 
         } catch (Exception e) {
             if (!Objects.isNull(conexao)) {
@@ -102,9 +102,9 @@ public class ClienteDiarioRepository {
                 if (rs.next()) {
                     String nome = rs.getString("nome");
                     int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
-                    String ClienteCPF = rs.getString("cpf");
+                    String clienteCPF = rs.getString("cpf");
                     Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
-                    return new ClienteDiario(nome, idade, ClienteCPF, sexo);
+                    return new ClienteDiario(nome, idade, clienteCPF, sexo);
 
                 } else {
                     throw new ClienteNaoEncontradoException("Nenhum cliente encontrado com esse cpf");

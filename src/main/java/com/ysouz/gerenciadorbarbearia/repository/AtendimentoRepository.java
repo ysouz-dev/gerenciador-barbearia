@@ -167,7 +167,7 @@ public class AtendimentoRepository {
     }
 
     public boolean containsAtendimento(Integer id) {
-        String query = "SELECT id FROM atendimentos WHERE id = ?";
+        String query = "SELECT 1 FROM atendimentos WHERE id = ?";
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query)) {
 
