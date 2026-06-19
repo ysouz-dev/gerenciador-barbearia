@@ -5,7 +5,9 @@ import com.ysouz.gerenciadorbarbearia.model.Pessoa;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.Sexo;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteNaoEncontradoException;
+import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
 
+import java.util.Objects;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -46,22 +48,44 @@ public class ClienteDiarioRepository {
                                                  "WHERE id_atendimento IN (" +
                                                  "SELECT id FROM atendimentos WHERE cliente_cpf = ?)";
 
-        try (Connection conexao = Conexao.getConexao();
-            PreparedStatement statement = conexao.prepareStatement(query);
-            PreparedStatement statementDeleteAtendimentos = conexao.prepareStatement(queryDeleteAtendimentos);
-            PreparedStatement statementDeleteAtendimentosServicos = conexao.prepareStatement(queryDeleteAtendimentosServicos)){
+        Connection conexao = null;
+        try {
+            conexao = Conexao.getConexao();
+            conexao.setAutoCommit(false);
 
-            statementDeleteAtendimentosServicos.setString(1, cpf);
-            statementDeleteAtendimentosServicos.executeUpdate();
+            try (PreparedStatement statement = conexao.prepareStatement(query);
+                 PreparedStatement statementDeleteAtendimentos = conexao.prepareStatement(queryDeleteAtendimentos);
+                 PreparedStatement statementDeleteAtendimentosServicos = conexao.prepareStatement(queryDeleteAtendimentosServicos)) {
 
-            statementDeleteAtendimentos.setString(1, cpf);
-            statementDeleteAtendimentos.executeUpdate();
+                statementDeleteAtendimentosServicos.setString(1, cpf);
+                statementDeleteAtendimentosServicos.executeUpdate();
 
-            statement.setString(1, cpf);
-            statement.executeUpdate();
+                statementDeleteAtendimentos.setString(1, cpf);
+                statementDeleteAtendimentos.executeUpdate();
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao remover cliente: " + e.getMessage());
+                statement.setString(1, cpf);
+                statement.executeUpdate();
+
+                conexao.commit();
+            }
+
+        } catch (Exception e) {
+            if (!Objects.isNull(conexao)) {
+                try {
+                    conexao.rollback();
+                } catch (SQLException ex) {
+                    throw new DatabaseException("Erro ao realizar rollback", ex);
+                }
+            }
+            throw new DatabaseException("Erro ao remover cliente", e);
+        } finally {
+            if (!Objects.isNull(conexao)) {
+                try {
+                    conexao.close();
+                } catch (SQLException e) {
+                    System.err.println("Erro ao fechar conexao" + e.getMessage());
+                }
+            }
         }
     }
 
