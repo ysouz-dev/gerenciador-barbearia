@@ -1,5 +1,7 @@
 package com.ysouz.gerenciadorbarbearia.connection;
 
+import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
+
 import java.util.Properties;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -15,7 +17,7 @@ public abstract class Conexao {
             prop.load(Conexao.class.getClassLoader().getResourceAsStream("database.properties"));
 
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao carregar configurações do banco de dados: " + e.getMessage());
+            throw new DatabaseException("Erro ao carregar configurações do banco de dados: ", e);
         }
     }
 
@@ -27,7 +29,7 @@ public abstract class Conexao {
 
             return DriverManager.getConnection(url, user, pass);
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao conectar com o banco de dados: " + e.getMessage());
+            throw new DatabaseException("Erro ao conectar com o banco de dados: ", e);
         }
     }
 

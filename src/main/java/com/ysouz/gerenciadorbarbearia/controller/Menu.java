@@ -4,6 +4,7 @@ import com.ysouz.gerenciadorbarbearia.util.*;
 import com.ysouz.gerenciadorbarbearia.service.*;
 import com.ysouz.gerenciadorbarbearia.model.*;
 import com.ysouz.gerenciadorbarbearia.enums.*;
+import com.ysouz.gerenciadorbarbearia.exception.*;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -119,7 +120,7 @@ public final class Menu {
             this.sistema.cadastrarCliente(new ClienteDiario(nome, idade, cpf, sexo));
             System.out.println("Cliente cadastrado com sucesso!");
 
-        } catch (IllegalArgumentException e) {
+        } catch (ClienteJaCadastradoException e) {
             System.out.println("Erro: " + e.getMessage());
         }
         Formatador.linha();
@@ -149,7 +150,7 @@ public final class Menu {
             cliente = this.sistema.buscaClientePorCpf(cpf);
             Formatador.linha();
 
-        } catch (IllegalArgumentException e) {
+        } catch (ClienteNaoEncontradoException e) {
             System.out.println("Erro: " + e.getMessage());
             return;
         }
@@ -194,7 +195,7 @@ public final class Menu {
             this.sistema.cadastrarAtendimento(atendimento);
             System.out.println("Atendimento cadastrado!");
 
-        } catch (IllegalArgumentException e) {
+        } catch (AtendimentoSemServicoException e) {
             System.out.println("Erro: " + e.getMessage());
         }
     }
@@ -205,7 +206,7 @@ public final class Menu {
                 System.out.println(cliente.resumo());
                 Formatador.linha();
             }
-        } catch (IllegalStateException e) {
+        } catch (ClientesNaoEncontradosException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -216,7 +217,7 @@ public final class Menu {
                 System.out.println(atendimento.resumo());
                 Formatador.linha();
             }
-        } catch (IllegalStateException e) {
+        } catch (AtendimentosNaoEncontradosException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -240,7 +241,7 @@ public final class Menu {
         // verifica se existe cliente com esse cpf no sistema
         try {
             this.sistema.buscaClientePorCpf(cpf);
-        } catch (IllegalArgumentException e) {
+        } catch (ClienteNaoEncontradoException e) {
             System.out.println(e.getMessage());
             return;
         }
@@ -249,7 +250,7 @@ public final class Menu {
         try {
             this.sistema.removerCliente(cpf);
             System.out.println("Cliente removido!");
-        } catch (IllegalArgumentException e) {
+        } catch (ClienteNaoEncontradoException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -285,7 +286,7 @@ public final class Menu {
         try {
             this.sistema.removerAtendimento(id);
             System.out.println("Atendimento removido!");
-        } catch (IllegalArgumentException e) {
+        } catch (AtendimentoNaoEncontradoException e) {
             System.out.println(e.getMessage());
         }
     }

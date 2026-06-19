@@ -4,6 +4,7 @@ import com.ysouz.gerenciadorbarbearia.model.Atendimento;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.*;
 import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
+import com.ysouz.gerenciadorbarbearia.exception.AtendimentoNaoEncontradoException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -110,7 +111,7 @@ public class AtendimentoRepository {
                     return new Atendimento(id, new ClienteDiario(nome, idade, cpf, sexo));
 
                 } else {
-                    throw new IllegalArgumentException("Nenhum atendimento encontrado com esse ID");
+                    throw new AtendimentoNaoEncontradoException("Nenhum atendimento encontrado com esse ID");
                 }
             }
         } catch (SQLException e) {

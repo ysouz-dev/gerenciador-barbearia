@@ -4,6 +4,7 @@ import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.Sexo;
+import com.ysouz.gerenciadorbarbearia.exception.ClienteNaoEncontradoException;
 
 import java.sql.PreparedStatement;
 import java.sql.Connection;
@@ -82,7 +83,7 @@ public class ClienteDiarioRepository {
                     return new ClienteDiario(nome, idade, ClienteCPF, sexo);
 
                 } else {
-                    throw new IllegalArgumentException("Nenhum cliente encontrado com esse cpf");
+                    throw new ClienteNaoEncontradoException("Nenhum cliente encontrado com esse cpf");
                 }
             }
         } catch (SQLException e) {

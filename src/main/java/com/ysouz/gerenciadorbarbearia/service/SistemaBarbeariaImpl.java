@@ -2,6 +2,7 @@ package com.ysouz.gerenciadorbarbearia.service;
 
 import com.ysouz.gerenciadorbarbearia.model.*;
 import com.ysouz.gerenciadorbarbearia.repository.*;
+import com.ysouz.gerenciadorbarbearia.exception.*;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     @Override
     public Pessoa buscaClientePorCpf(String cpf) {
         if (!this.listaClientes.containsCliente(cpf)) {
-            throw new IllegalArgumentException("O sistema não possui um cliente com esse cpf");
+            throw new ClienteNaoEncontradoException("O sistema não possui um cliente com esse cpf");
         }
         return this.listaClientes.buscaPorCpf(cpf);
     }
@@ -32,7 +33,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     @Override
     public void cadastrarCliente(Pessoa pessoa) {
         if (this.listaClientes.containsCliente(pessoa.getCPF())) {
-            throw new IllegalArgumentException("O sistema já possui um cliente cadastrado com esse CPF");
+            throw new ClienteJaCadastradoException("O sistema já possui um cliente cadastrado com esse CPF");
         }
         this.listaClientes.salvar(pessoa);
     }
@@ -40,7 +41,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     @Override
     public void cadastrarAtendimento(Atendimento atendimento) {
         if (atendimento.getServicosRealizados().isEmpty()) {
-            throw new IllegalArgumentException("Não é possivel cadastrar um atendimento sem serviços realizados.");
+            throw new AtendimentoSemServicoException("Não é possivel cadastrar um atendimento sem serviços realizados.");
         }
         this.listaAtendimentos.salvar(atendimento);
     }
@@ -49,7 +50,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     public List<Pessoa> listarClientes() {
         List<Pessoa> lista = this.listaClientes.listaDeClientes();
         if (lista.isEmpty()) {
-            throw new IllegalStateException("Nenhum cliente cadastrado no sistema.");
+            throw new ClientesNaoEncontradosException("Nenhum cliente cadastrado no sistema.");
         }
         return lista;
     }
@@ -58,7 +59,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     public List<Atendimento> listarAtendimentos() {
         List<Atendimento> lista = this.listaAtendimentos.listaDeAtendimento();
         if (lista.isEmpty()) {
-            throw new IllegalStateException("Nenhum atendimento cadastrado no sistema.");
+            throw new AtendimentosNaoEncontradosException("Nenhum atendimento cadastrado no sistema.");
         }
         return lista;
     }
@@ -66,7 +67,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     @Override
     public void removerCliente(String cpf) {
         if (!this.listaClientes.containsCliente(cpf)){
-            throw new IllegalArgumentException("Cliente não está cadastrado no sistema.");
+            throw new ClienteNaoEncontradoException("Cliente não está cadastrado no sistema.");
         }
         this.listaClientes.remover(cpf);
     }
@@ -74,7 +75,7 @@ public final class SistemaBarbeariaImpl implements SistemaBarbearia {
     @Override
     public void removerAtendimento(Integer id) {
         if (!this.listaAtendimentos.containsAtendimento(id)) {
-            throw new IllegalArgumentException("Atendimento não está cadastrado no sistema.");
+            throw new AtendimentoNaoEncontradoException("Atendimento não está cadastrado no sistema.");
         }
         this.listaAtendimentos.remover(id);
     }
