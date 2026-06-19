@@ -154,7 +154,7 @@ public class AtendimentoRepository {
                     String cpf = rs.getString("cpf");
                     String nome = rs.getString("nome");
                     int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
-                    Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
+                    Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
                     return new Atendimento(id, new ClienteDiario(nome, idade, cpf, sexo));
 
                 } else {
@@ -203,7 +203,7 @@ public class AtendimentoRepository {
                     String nome = rs.getString("nome");
                     String cpf = rs.getString("cpf");
                     int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
-                    Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
+                    Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
 
                     Atendimento atendimento = new Atendimento(id, new ClienteDiario(nome, idade, cpf, sexo));
                     lista.put(id, atendimento);

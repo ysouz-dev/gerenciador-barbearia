@@ -103,7 +103,7 @@ public class ClienteDiarioRepository {
                     String nome = rs.getString("nome");
                     int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
                     String clienteCPF = rs.getString("cpf");
-                    Sexo sexo = Sexo.valueOf(rs.getString("sexo"));
+                    Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
                     return new ClienteDiario(nome, idade, clienteCPF, sexo);
 
                 } else {
