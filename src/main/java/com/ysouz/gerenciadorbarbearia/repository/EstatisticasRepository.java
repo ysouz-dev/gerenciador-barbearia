@@ -1,6 +1,7 @@
 package com.ysouz.gerenciadorbarbearia.repository;
 
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
+import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -20,7 +21,7 @@ public class EstatisticasRepository {
                 return rs.getInt("total");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao retornar total de clientes: " + e.getMessage());
+            throw new DatabaseException("Erro ao retornar total de clientes: " + e.getMessage());
         }
         return 0;
     }
@@ -35,7 +36,7 @@ public class EstatisticasRepository {
                 return rs.getInt("total");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao retornar total de atendimentos: " + e.getMessage());
+            throw new DatabaseException("Erro ao retornar total de atendimentos: " + e.getMessage());
         }
         return 0;
     }
@@ -50,7 +51,7 @@ public class EstatisticasRepository {
                 return rs.getBigDecimal("total");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao retornar total faturado : " + e.getMessage());
+            throw new DatabaseException("Erro ao retornar total faturado : " + e.getMessage());
         }
         return BigDecimal.ZERO;
     }

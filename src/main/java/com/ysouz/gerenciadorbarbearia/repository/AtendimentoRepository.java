@@ -162,7 +162,7 @@ public class AtendimentoRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar atendimento: " + e.getMessage());
+            throw new DatabaseException("Erro ao buscar atendimento: " + e.getMessage());
         }
     }
 
@@ -213,7 +213,7 @@ public class AtendimentoRepository {
             return new ArrayList<>(lista.values());
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao retornar lista de atendimentos: " + e.getMessage());
+            throw new DatabaseException("Erro ao retornar lista de atendimentos: " + e.getMessage());
         }
     }
 }
