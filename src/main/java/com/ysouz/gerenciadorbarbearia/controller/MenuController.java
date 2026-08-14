@@ -1,19 +1,24 @@
 package com.ysouz.gerenciadorbarbearia.controller;
 
 import com.ysouz.gerenciadorbarbearia.util.*;
-import com.ysouz.gerenciadorbarbearia.model.*;
-import com.ysouz.gerenciadorbarbearia.exception.*;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public final class MenuController {
     private final Scanner scanner;
-    private final SistemaBarbearia sistema;
+    private final AtendimentoController atendimentoController;
+    private final ClienteDiarioController clienteDiarioController;
+    private final EstatisticasController estatisticasController;
 
-    public MenuController() {
-        this.scanner = new Scanner(System.in);
-        this.sistema = new SistemaBarbeariaImpl();
+    public MenuController(Scanner scanner, AtendimentoController atendimentoController,
+                          ClienteDiarioController clienteDiarioController,
+                          EstatisticasController estatisticasController) {
+
+        this.scanner = scanner;
+        this.atendimentoController = atendimentoController;
+        this.clienteDiarioController = clienteDiarioController;
+        this.estatisticasController = estatisticasController;
     }
 
     public int MenuPrincipal() {
@@ -49,61 +54,36 @@ public final class MenuController {
         return escolha;
     }
 
+    public void cadastrarCliente() {
+        this.clienteDiarioController.cadastrarCliente();
+    }
+
+    public void cadastrarAtendimento() {
+        this.atendimentoController.cadastrarAtendimento();
+    }
+
+    public void listarClientes() {
+        this.clienteDiarioController.listarClientes();
+    }
 
     public void listarAtendimentos() {
-        try {
-            for (Atendimento atendimento : this.sistema.listarAtendimentos()) {
-                System.out.println(atendimento.resumo());
-                Formatador.linha();
-            }
-        } catch (AtendimentosNaoEncontradosException e) {
-            System.out.println(e.getMessage());
-        }
+        this.atendimentoController.listarAtendimentos();
+    }
+
+    public void removerCliente() {
+        this.clienteDiarioController.removerCliente();
     }
 
     public void removerAtendimento() {
-        Formatador.tituloDinamico("Remover Atendimento", 4);
-
-        // leitura e validacao do id
-        Integer id;
-        while (true) {
-            try {
-                System.out.print("Digite o id do atendimento: ");
-                id = this.scanner.nextInt();
-                Validador.validaId(id);
-                break;
-
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
-
-            } catch (InputMismatchException e) {
-                System.out.println("Erro: digite apenas números.");
-                this.scanner.nextLine();
-            }
-        }
-
-        // verifica se existe atendimento com o ID antes de remover
-        if (!this.sistema.containsAtendimento(id)) {
-            System.out.println("Erro: Atendimento não encontrado no sistema");
-            return;
-        }
-
-        // remove atendimento
-        try {
-            this.sistema.removerAtendimento(id);
-            System.out.println("Atendimento removido!");
-        } catch (AtendimentoNaoEncontradoException e) {
-            System.out.println(e.getMessage());
-        }
+        this.atendimentoController.removerAtendimento();
     }
 
     public void estatisticas() {
-        Formatador.tituloDinamico("Estatísticas", 8);
-        System.out.println(this.sistema.estatisticas());
+        this.estatisticasController.estatisticas();
     }
 
     public void encerrarSistema() {
-        System.out.println("Sistema encerrado. Volte sempre!");
         this.scanner.close();
+        System.out.println("Sistema encerrado, volte sempre!");
     }
 }
