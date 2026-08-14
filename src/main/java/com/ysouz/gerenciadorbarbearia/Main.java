@@ -1,47 +1,33 @@
 package com.ysouz.gerenciadorbarbearia;
 
-import com.ysouz.gerenciadorbarbearia.controller.Menu;
+import com.ysouz.gerenciadorbarbearia.controller.*;
+import com.ysouz.gerenciadorbarbearia.repository.*;
+import com.ysouz.gerenciadorbarbearia.service.*;
+
+import java.util.Scanner;
 
 public class Main {
+    private static MenuController createMenu() {
+        Scanner scanner = new Scanner(System.in);
+
+        ClienteDiarioRepository clienteDiarioRepository = new ClienteDiarioRepository();
+        ClienteDiarioService clienteDiarioService = new ClienteDiarioService(clienteDiarioRepository);
+        ClienteDiarioController clienteDiarioController = new ClienteDiarioController(clienteDiarioService, scanner);
+
+        AtendimentoRepository atendimentoRepository = new AtendimentoRepository();
+        AtendimentoService atendimentoService = new AtendimentoService(atendimentoRepository);
+        AtendimentoController atendimentoController = new AtendimentoController(atendimentoService,
+                clienteDiarioService, scanner);
+
+        EstatisticasRepository estatisticasRepository = new EstatisticasRepository();
+        EstatisticasService estatisticasService = new EstatisticasService(estatisticasRepository);
+        EstatisticasController estatisticasController = new EstatisticasController(estatisticasService);
+
+        return new MenuController(scanner, atendimentoController, clienteDiarioController, estatisticasController);
+    }
+
     public static void main(String[] args) {
-        Menu menu = new Menu();
-        int escolha = Integer.MIN_VALUE;
-        while (escolha != 0) {
-            escolha = menu.MenuPrincipal();
-
-            switch (escolha) {
-                case 1:
-                    menu.cadastrarCliente();
-                    break;
-
-                case 2:
-                    menu.cadastrarAtendimento();
-                    break;
-
-                case 3:
-                    menu.listarClientes();
-                    break;
-
-                case 4:
-                    menu.listarAtendimentos();
-                    break;
-
-                case 5:
-                    menu.removerCliente();
-                    break;
-
-                case 6:
-                    menu.removerAtendimento();
-                    break;
-
-                case 7:
-                    menu.estatisticas();
-                    break;
-
-                case 0:
-                    menu.encerrarSistema();
-                    break;
-            }
-        }
+        MenuController menu = createMenu();
+        menu.iniciar();
     }
 }
