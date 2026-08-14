@@ -12,6 +12,7 @@ public class AtendimentoService {
     private final AtendimentoRepository repository;
 
     public AtendimentoService(AtendimentoRepository repository) {
+        if (repository == null) throw new NullPointerException("O repositório de atendimento não pode ser nulo.");
         this.repository = repository;
     }
 

@@ -15,6 +15,19 @@ public final class MenuController {
                           ClienteDiarioController clienteDiarioController,
                           EstatisticasController estatisticasController) {
 
+        if (scanner == null) {
+            throw new NullPointerException("O scanner de MenuController não pode ser nulo.");
+        }
+        if (atendimentoController == null) {
+            throw new NullPointerException("O controller de atendimento não pode ser nulo.");
+        }
+        if (clienteDiarioController == null) {
+            throw new NullPointerException("O controller de cliente não pode ser nulo.");
+        }
+        if (estatisticasController == null) {
+            throw new NullPointerException("O controller de estatística não pode ser nulo.");
+        }
+
         this.scanner = scanner;
         this.atendimentoController = atendimentoController;
         this.clienteDiarioController = clienteDiarioController;

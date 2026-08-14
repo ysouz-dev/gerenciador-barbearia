@@ -23,6 +23,10 @@ public class AtendimentoController {
 
     public AtendimentoController(AtendimentoService atendimentoService,
                                  ClienteDiarioService clienteService, Scanner scanner) {
+        if (atendimentoService == null) throw new NullPointerException("O service de atendimento não pode ser nulo.");
+        if (clienteService == null) throw new NullPointerException("O service de cliente não pode ser nulo.");
+        if (scanner == null) throw new NullPointerException("O scanner de AtendimentoController não pode ser nulo.");
+
         this.scanner = scanner;
         this.atendimentoservice = atendimentoService;
         this.clienteService = clienteService;

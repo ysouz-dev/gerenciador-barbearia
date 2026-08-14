@@ -18,6 +18,9 @@ public class ClienteDiarioController {
     private final Scanner scanner;
 
     public ClienteDiarioController(ClienteDiarioService service, Scanner scanner) {
+        if (service == null) throw new NullPointerException("O service de cliente não pode ser nulo.");
+        if (scanner == null) throw new NullPointerException("O scanner de ClienteDiarioController não pode ser nulo.");
+
         this.service = service;
         this.scanner = scanner;
     }

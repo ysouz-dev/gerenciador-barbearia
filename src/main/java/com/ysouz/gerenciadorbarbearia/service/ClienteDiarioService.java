@@ -12,6 +12,7 @@ public class ClienteDiarioService {
     private final ClienteDiarioRepository repository;
 
     public ClienteDiarioService(ClienteDiarioRepository repository) {
+        if (repository == null) throw new NullPointerException("O repositório de cliente não pode ser nulo.");
         this.repository = repository;
     }
 

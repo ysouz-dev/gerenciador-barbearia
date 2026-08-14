@@ -6,6 +6,7 @@ public class EstatisticasService {
     private final EstatisticasRepository repository;
 
     public EstatisticasService(EstatisticasRepository repository) {
+        if (repository == null) throw new NullPointerException("O repositório de estatística não pode ser nulo.");
         this.repository = repository;
     }
 
