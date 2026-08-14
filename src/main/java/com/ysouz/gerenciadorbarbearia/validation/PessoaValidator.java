@@ -1,6 +1,6 @@
 package com.ysouz.gerenciadorbarbearia.validation;
 
-public final class ClienteDiarioValidator {
+public final class PessoaValidator {
 
     public static void validaCPF(String cpf) {
         if (cpf == null || cpf.isBlank() || cpf.strip().length() != 11) {
