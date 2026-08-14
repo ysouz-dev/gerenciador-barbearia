@@ -1,19 +1,19 @@
 package com.ysouz.gerenciadorbarbearia.model;
 
-import com.ysouz.gerenciadorbarbearia.util.Validador;
 import com.ysouz.gerenciadorbarbearia.enums.Sexo;
+import com.ysouz.gerenciadorbarbearia.validation.PessoaValidator;
 
 public abstract class Pessoa {
-    private String nome;
-    private int idade;
+    private final String nome;
+    private final int idade;
     private final String cpf;
     private final Sexo sexo;
 
     public Pessoa(String nome, int idade, String cpf, Sexo sexo) {
-        Validador.validaNome(nome);
-        Validador.validaIdade(idade);
-        Validador.validaCPF(cpf);
-        Sexo.isSexo(sexo);
+        PessoaValidator.validaNome(nome);
+        PessoaValidator.validaIdade(idade);
+        PessoaValidator.validaCPF(cpf);
+        if (sexo == null) throw new IllegalArgumentException("O sexo não pode ser nulo.");
 
         this.nome = nome.strip().toUpperCase();
         this.idade = idade;
