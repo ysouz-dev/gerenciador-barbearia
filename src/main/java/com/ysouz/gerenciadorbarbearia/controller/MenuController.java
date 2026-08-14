@@ -21,7 +21,7 @@ public final class MenuController {
         this.estatisticasController = estatisticasController;
     }
 
-    public int MenuPrincipal() {
+    public int menuPrincipal() {
         Formatador.linha();
         Formatador.titulo("Barbearia YS");
         Formatador.linha();
@@ -54,36 +54,45 @@ public final class MenuController {
         return escolha;
     }
 
-    public void cadastrarCliente() {
-        this.clienteDiarioController.cadastrarCliente();
-    }
+    public void iniciar() {
+        int escolha = Integer.MIN_VALUE;
+        while (escolha != 0) {
+            escolha = this.menuPrincipal();
 
-    public void cadastrarAtendimento() {
-        this.atendimentoController.cadastrarAtendimento();
-    }
+            switch (escolha) {
+                case 1:
+                    this.clienteDiarioController.cadastrarCliente();
+                    break;
 
-    public void listarClientes() {
-        this.clienteDiarioController.listarClientes();
-    }
+                case 2:
+                    this.atendimentoController.cadastrarAtendimento();
+                    break;
 
-    public void listarAtendimentos() {
-        this.atendimentoController.listarAtendimentos();
-    }
+                case 3:
+                    this.clienteDiarioController.listarClientes();
+                    break;
 
-    public void removerCliente() {
-        this.clienteDiarioController.removerCliente();
-    }
+                case 4:
+                    this.atendimentoController.listarAtendimentos();
+                    break;
 
-    public void removerAtendimento() {
-        this.atendimentoController.removerAtendimento();
-    }
+                case 5:
+                    this.clienteDiarioController.removerCliente();
+                    break;
 
-    public void estatisticas() {
-        this.estatisticasController.estatisticas();
-    }
+                case 6:
+                    this.atendimentoController.removerAtendimento();
+                    break;
 
-    public void encerrarSistema() {
-        this.scanner.close();
-        System.out.println("Sistema encerrado, volte sempre!");
+                case 7:
+                    this.estatisticasController.estatisticas();
+                    break;
+
+                case 0:
+                    this.scanner.close();
+                    System.out.println("Sistema encerrado, volte sempre!");
+                    break;
+            }
+        }
     }
 }
