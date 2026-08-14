@@ -7,8 +7,8 @@ public enum Sexo {
     FEMININO("FEMININO", "F"),
     NAO_INFORMADO("NÃO INFORMADO", "N");
 
-    private String nome;
-    private String sigla;
+    private final String nome;
+    private final String sigla;
 
     Sexo(String nome, String sigla) {
         this.nome = nome;
@@ -27,11 +27,5 @@ public enum Sexo {
             }
         }
         throw new IllegalArgumentException("Sexo inválido!");
-    }
-
-    public static void isSexo(Sexo sexo) {
-        if (Objects.isNull(sexo)) {
-            throw new IllegalArgumentException("Sexo inválido!");
-        }
     }
 }
