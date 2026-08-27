@@ -16,10 +16,6 @@ public class AtendimentoService {
         this.repository = repository;
     }
 
-    public boolean containsAtendimento(Integer id) {
-        return this.repository.containsAtendimento(id);
-    }
-
     public void cadastrarAtendimento(Atendimento atendimento) {
         if (atendimento.getServicosRealizados().isEmpty()) {
             throw new AtendimentoSemServicoException("Não é possível cadastrar um atendimento sem serviços realizados.");
