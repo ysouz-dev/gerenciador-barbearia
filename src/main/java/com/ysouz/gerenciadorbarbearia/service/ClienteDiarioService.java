@@ -30,9 +30,6 @@ public class ClienteDiarioService {
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
     public Pessoa buscaClientePorCpf(String cpf) {
-        if (!this.repository.containsCliente(cpf)) {
-            throw new ClienteNaoEncontradoException("Cliente não encontrado com esse cpf.");
-        }
         return this.repository.buscaPorCpf(cpf);
     }
 
