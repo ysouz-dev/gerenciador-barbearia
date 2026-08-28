@@ -6,6 +6,7 @@ import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.Sexo;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
+import com.ysouz.gerenciadorbarbearia.util.ConexaoUtil;
 
 import java.util.Objects;
 import java.sql.PreparedStatement;
@@ -70,22 +71,12 @@ public class ClienteDiarioRepository {
             conexao.commit();
 
         } catch (Exception e) {
-            if (!Objects.isNull(conexao)) {
-                try {
-                    conexao.rollback();
-                } catch (SQLException ex) {
-                    throw new DatabaseException("Erro ao realizar rollback", ex);
-                }
-            }
+            ConexaoUtil.rollback(conexao, "Erro ao realizar rollback");
+
             throw new DatabaseException("Erro ao remover cliente", e);
+
         } finally {
-            if (!Objects.isNull(conexao)) {
-                try {
-                    conexao.close();
-                } catch (SQLException e) {
-                    System.err.println("Erro ao fechar conexão com banco de dados: " + e.getMessage());
-                }
-            }
+            ConexaoUtil.fechar(conexao, "Erro ao fechar conexão com banco de dados: ");
         }
     }
 
