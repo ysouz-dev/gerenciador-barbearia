@@ -5,7 +5,7 @@ import com.ysouz.gerenciadorbarbearia.enums.Sexo;
  * Representa um cliente diário no sistema.
  */
 public class ClienteDiario extends Pessoa {
-    private int totalAtendimentos;
+    private final int totalAtendimentos;
 
     /**
      * Cria um cliente diário validando os dados informados.

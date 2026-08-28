@@ -14,7 +14,7 @@ public enum Servico {
     LUZES(new BigDecimal("45")),
     PLATINADO(new BigDecimal("50"));
 
-    private BigDecimal valor;
+    private final BigDecimal valor;
 
     Servico(BigDecimal valor) {
         this.valor = valor;

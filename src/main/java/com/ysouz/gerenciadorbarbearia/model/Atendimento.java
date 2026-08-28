@@ -12,10 +12,10 @@ import java.util.Objects;
  */
 public class Atendimento {
 
-    private Integer id;
-    private List<Servico> servicosRealizados;
+    private final Integer id;
+    private final List<Servico> servicosRealizados;
     private BigDecimal totalServico;
-    private Pessoa cliente;
+    private final Pessoa cliente;
 
     /**
      * Cria um atendimento validando o cliente informado.
