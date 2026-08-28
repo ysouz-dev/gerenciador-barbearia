@@ -90,10 +90,6 @@ public class Atendimento {
         return this.cliente;
     }
 
-    public int getId() {
-        return this.id;
-    }
-
     public BigDecimal getTotal() {
         return this.totalServico;
     }
