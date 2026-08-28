@@ -125,7 +125,7 @@ public class AtendimentoRepository {
         } catch (Exception e) {
             ConexaoUtil.rollback(conexao, "Erro ao realizar rollback");
 
-            throw new DatabaseException("Erro ao remover atendimento: ", e);
+            throw new DatabaseException("Erro ao remover atendimento.", e);
 
         } finally {
             ConexaoUtil.fechar(conexao, "Erro ao fechar conexão com banco de dados: ");
@@ -167,7 +167,7 @@ public class AtendimentoRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Erro ao buscar atendimento: " + e.getMessage());
+            throw new DatabaseException("Erro ao buscar atendimento.", e);
         }
     }
 
@@ -190,7 +190,7 @@ public class AtendimentoRepository {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Erro ao verificar se atendimento está no banco: " + e.getMessage());
+            throw new DatabaseException("Erro ao verificar se atendimento está no banco.", e);
         }
     }
 
@@ -235,7 +235,7 @@ public class AtendimentoRepository {
             return new ArrayList<>(lista.values());
 
         } catch (SQLException e) {
-            throw new DatabaseException("Erro ao retornar lista de atendimentos: " + e.getMessage());
+            throw new DatabaseException("Erro ao retornar lista de atendimentos.", e);
         }
     }
 }

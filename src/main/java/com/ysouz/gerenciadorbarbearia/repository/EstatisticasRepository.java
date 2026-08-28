@@ -30,7 +30,7 @@ public class EstatisticasRepository {
                 return rs.getInt("total");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Erro ao retornar total de clientes: " + e.getMessage());
+            throw new DatabaseException("Erro ao retornar total de clientes.", e);
         }
         return 0;
     }
@@ -51,7 +51,7 @@ public class EstatisticasRepository {
                 return rs.getInt("total");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Erro ao retornar total de atendimentos: " + e.getMessage());
+            throw new DatabaseException("Erro ao retornar total de atendimentos", e);
         }
         return 0;
     }
@@ -72,7 +72,7 @@ public class EstatisticasRepository {
                 return rs.getBigDecimal("total");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Erro ao retornar total faturado : " + e.getMessage());
+            throw new DatabaseException("Erro ao retornar total faturado.", e);
         }
         return BigDecimal.ZERO;
     }
