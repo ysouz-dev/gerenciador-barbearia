@@ -50,10 +50,13 @@ public class Atendimento {
      * Adiciona o serviço informado a lista de serviços do atendimento.
      *
      * @param servico serviço realizado
-     * @throws IllegalArgumentException se o serviço informado já tiver sido realizado pelo cliente nesse atendimento
+     * @throws IllegalArgumentException se o serviço informado já tiver sido realizado pelo cliente nesse atendimento,
+     * ou o serviço informado for nulo
      */
     public void adicionarServico(Servico servico) {
-        Servico.isServico(servico);
+        if (Objects.isNull(servico)) {
+            throw new IllegalArgumentException("O serviço não pode ser nulo.");
+        }
         if (containsServico(this.servicosRealizados, servico)) {
             throw new IllegalArgumentException("Esse serviço já foi registrado nesse atendimento.");
         }
