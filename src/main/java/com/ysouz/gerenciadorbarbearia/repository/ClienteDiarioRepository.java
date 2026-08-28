@@ -6,8 +6,8 @@ import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.Sexo;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
+import com.ysouz.gerenciadorbarbearia.util.ConexaoUtil;
 
-import java.util.Objects;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -16,8 +16,17 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Repositório responsável pelos registros de Clientes do sistema.
+ */
 public class ClienteDiarioRepository {
 
+    /**
+     * Registra o cliente informado no sistema.
+     *
+     * @param pessoa cliente a ser registrado
+     * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
+     */
     public void salvar(Pessoa pessoa) {
         String query = "INSERT INTO clientes VALUES (?, ?, year(now()) - ?, ?, default)";
 
@@ -35,6 +44,16 @@ public class ClienteDiarioRepository {
         }
     }
 
+    /**
+     * Remove do sistema o cliente referente ao cpf informado.
+     * <p>
+     * Também remove todos os atendimentos vinculados ao cliente,
+     * e a respectiva relação entre os atendimentos e serviços realizados.
+     *
+     * @param cpf cpf do cliente a ser removido
+     * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados ou ao realizar rollback,
+     * ou ao tentar fechar conexão com o banco de dados
+     */
     public void remover(String cpf) {
 
         // query que remove o cliente
@@ -70,25 +89,23 @@ public class ClienteDiarioRepository {
             conexao.commit();
 
         } catch (Exception e) {
-            if (!Objects.isNull(conexao)) {
-                try {
-                    conexao.rollback();
-                } catch (SQLException ex) {
-                    throw new DatabaseException("Erro ao realizar rollback", ex);
-                }
-            }
+            ConexaoUtil.rollback(conexao, "Erro ao realizar rollback");
+
             throw new DatabaseException("Erro ao remover cliente", e);
+
         } finally {
-            if (!Objects.isNull(conexao)) {
-                try {
-                    conexao.close();
-                } catch (SQLException e) {
-                    System.err.println("Erro ao fechar conexão com banco de dados: " + e.getMessage());
-                }
-            }
+            ConexaoUtil.fechar(conexao, "Erro ao fechar conexão com banco de dados: ");
         }
     }
 
+    /**
+     * Busca no sistema o cliente referente ao cpf informado.
+     *
+     * @param cpf cpf do cliente
+     * @return o cliente encontrado com o cpf informado
+     * @throws ClienteNaoEncontradoException se nenhum cliente for encontrado com o cpf informado
+     * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
+     */
     public Pessoa buscaPorCpf(String cpf) {
         String query = "SELECT * FROM clientes WHERE cpf = ?";
 
@@ -115,6 +132,13 @@ public class ClienteDiarioRepository {
         }
     }
 
+    /**
+     * Verifica se o sistema contém o cliente referente ao cpf informado.
+     *
+     * @param cpf cpf do cliente
+     * @return true se o cliente for encontrado no sistema; false caso o contrário
+     * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
+     */
     public boolean containsCliente(String cpf) {
         String query = "SELECT nome FROM clientes WHERE cpf = ?";
 
@@ -131,6 +155,12 @@ public class ClienteDiarioRepository {
         }
     }
 
+    /**
+     * Lista todos os clientes registrados no sistema.
+     *
+     * @return uma lista com todos os clientes registrados; lista vazia caso nenhum cliente registrado
+     * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
+     */
     public List<Pessoa> listaDeClientes() {
         String query = "SELECT * FROM clientes";
 
