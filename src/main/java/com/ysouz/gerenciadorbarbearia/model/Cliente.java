@@ -4,8 +4,8 @@ import com.ysouz.gerenciadorbarbearia.enums.Sexo;
 /**
  * Representa um cliente diário no sistema.
  */
-public class ClienteDiario extends Pessoa {
-    private int totalAtendimentos;
+public class Cliente extends Pessoa {
+    private final int totalAtendimentos;
 
     /**
      * Cria um cliente diário validando os dados informados.
@@ -17,7 +17,7 @@ public class ClienteDiario extends Pessoa {
      * @throws IllegalArgumentException se algum dos dados informados forem inválidos ou nulos
      * (nome, idade, cpf, sexo)
      */
-    public ClienteDiario(String nome, int idade, String cpf, Sexo sexo) {
+    public Cliente(String nome, int idade, String cpf, Sexo sexo) {
         super(nome, idade, cpf, sexo);
         this.totalAtendimentos = 0;
     }
@@ -35,7 +35,7 @@ public class ClienteDiario extends Pessoa {
      * @throws IllegalArgumentException se algum dos dados informados forem inválidos ou nulos
      * (nome, idade, cpf, sexo)
      */
-    public ClienteDiario(String nome, int idade, String cpf, Sexo sexo, int totalAtendimentos) {
+    public Cliente(String nome, int idade, String cpf, Sexo sexo, int totalAtendimentos) {
         super(nome, idade, cpf, sexo);
         this.totalAtendimentos = totalAtendimentos;
     }

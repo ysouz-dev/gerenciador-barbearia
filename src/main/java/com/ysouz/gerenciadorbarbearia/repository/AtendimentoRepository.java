@@ -1,13 +1,15 @@
 package com.ysouz.gerenciadorbarbearia.repository;
 
+import com.ysouz.gerenciadorbarbearia.dto.AtendimentoDTO;
 import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
 import com.ysouz.gerenciadorbarbearia.model.Atendimento;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.*;
-import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
+import com.ysouz.gerenciadorbarbearia.model.Cliente;
 import com.ysouz.gerenciadorbarbearia.exception.AtendimentoNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.util.ConexaoUtil;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -160,7 +162,7 @@ public class AtendimentoRepository {
                     String nome = rs.getString("nome");
                     int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
                     Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
-                    return new Atendimento(id, new ClienteDiario(nome, idade, cpf, sexo));
+                    return new Atendimento(id, new Cliente(nome, idade, cpf, sexo));
 
                 } else {
                     throw new AtendimentoNaoEncontradoException("Nenhum atendimento encontrado com esse ID");
@@ -204,33 +206,32 @@ public class AtendimentoRepository {
      * @return uma lista de todos os atendimentos registrados; Uma lista vazia se nenhum atendimento estiver registrado
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
-    public List<Atendimento> listaDeAtendimento() {
-        String query = "SELECT ate.id, cl.*, sv.nome as servico FROM atendimentos_servicos as ates " +
+    public List<AtendimentoDTO> listaDeAtendimento() {
+        String query = "SELECT ate.id, cl.nome, sv.nome as servico, ate.valor FROM atendimentos_servicos as ates " +
                         "JOIN atendimentos as ate " +
                         "ON ate.id = ates.id_atendimento " +
-                        "JOIN clientes as cl " +
-                        "ON cl.cpf = ate.cliente_cpf " +
                         "JOIN servicos as sv " +
-                        "ON sv.id = ates.id_servico";
+                        "ON sv.id = ates.id_servico " +
+                        "JOIN clientes as cl " +
+                        "ON cl.cpf = ate.cliente_cpf";
 
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query);
             ResultSet rs = statement.executeQuery()) {
 
-            Map<Integer, Atendimento> lista = new HashMap<>();
+            Map<Integer, AtendimentoDTO> lista = new HashMap<>();
             while (rs.next()) {
                 int id = rs.getInt("id");
 
                 if (!lista.containsKey(id)) {
                     String nome = rs.getString("nome");
-                    String cpf = rs.getString("cpf");
-                    int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
-                    Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
+                    List<String> servico = new ArrayList<>();
+                    BigDecimal total = rs.getBigDecimal("valor");
 
-                    Atendimento atendimento = new Atendimento(id, new ClienteDiario(nome, idade, cpf, sexo));
+                    AtendimentoDTO atendimento = new AtendimentoDTO(id, nome, servico, total);
                     lista.put(id, atendimento);
                 }
-                lista.get(id).adicionarServico(Servico.valueOf(rs.getString("servico")));
+                lista.get(id).getServicos().add(rs.getString("servico"));
             }
             return new ArrayList<>(lista.values());
 

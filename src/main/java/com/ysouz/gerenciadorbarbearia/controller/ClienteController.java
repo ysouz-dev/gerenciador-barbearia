@@ -1,25 +1,25 @@
 package com.ysouz.gerenciadorbarbearia.controller;
 
+import com.ysouz.gerenciadorbarbearia.dto.ClienteDTO;
 import com.ysouz.gerenciadorbarbearia.enums.Sexo;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteJaCadastradoException;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.exception.ClientesNaoEncontradosException;
-import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
-import com.ysouz.gerenciadorbarbearia.model.Pessoa;
-import com.ysouz.gerenciadorbarbearia.service.ClienteDiarioService;
+import com.ysouz.gerenciadorbarbearia.model.Cliente;
+import com.ysouz.gerenciadorbarbearia.service.ClienteService;
 import com.ysouz.gerenciadorbarbearia.util.Formatador;
 import com.ysouz.gerenciadorbarbearia.validation.PessoaValidator;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class ClienteDiarioController {
-    private final ClienteDiarioService service;
+public class ClienteController {
+    private final ClienteService service;
     private final Scanner scanner;
 
-    public ClienteDiarioController(ClienteDiarioService service, Scanner scanner) {
+    public ClienteController(ClienteService service, Scanner scanner) {
         if (service == null) throw new NullPointerException("O service de cliente não pode ser nulo.");
-        if (scanner == null) throw new NullPointerException("O scanner de ClienteDiarioController não pode ser nulo.");
+        if (scanner == null) throw new NullPointerException("O scanner de ClienteController não pode ser nulo.");
 
         this.service = service;
         this.scanner = scanner;
@@ -28,7 +28,7 @@ public class ClienteDiarioController {
     public void cadastrarCliente() {
         Formatador.tituloDinamico("Cadastro Cliente", 6);
 
-        ClienteDiario cliente = null;
+        Cliente cliente = null;
         String nome = "";
         int idade = Integer.MIN_VALUE;
         String cpf = "";
@@ -66,7 +66,7 @@ public class ClienteDiarioController {
                     contador++;
                 }
 
-                cliente = new ClienteDiario(nome, idade, cpf, sexo);
+                cliente = new Cliente(nome, idade, cpf, sexo);
 
                 this.service.cadastrarCliente(cliente);
                 System.out.println("Cliente cadastrado com sucesso!");
@@ -88,9 +88,14 @@ public class ClienteDiarioController {
 
     public void listarClientes() {
         try {
-            for (Pessoa cliente : this.service.listarClientes()) {
-                System.out.println(cliente.resumo());
+            int contador = 1;
+            for (ClienteDTO cliente : this.service.listarClientes()) {
+                System.out.println("N.º: " + contador);
+                System.out.println("Nome: " + cliente.getNome());
+                System.out.println("Idade: " + cliente.getIdade());
+                System.out.println("Sexo: " + cliente.getSexo());
                 Formatador.linha();
+                contador++;
             }
         } catch (ClientesNaoEncontradosException e) {
             System.out.println(e.getMessage());

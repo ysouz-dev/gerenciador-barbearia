@@ -23,7 +23,7 @@ public final class ConexaoUtil {
 
     public static void fechar(Connection conexao, String mensagemErroFecharConexao) {
         if (mensagemErroFecharConexao == null) {
-            throw new NullPointerException("A mensagem de erro ao fechar conexão não pode ");
+            throw new NullPointerException("A mensagem de erro ao fechar conexão não pode ser nula");
         }
 
         if (conexao != null) {

@@ -1,5 +1,6 @@
 package com.ysouz.gerenciadorbarbearia.service;
 
+import com.ysouz.gerenciadorbarbearia.dto.AtendimentoDTO;
 import com.ysouz.gerenciadorbarbearia.exception.AtendimentoNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.exception.AtendimentoSemServicoException;
 import com.ysouz.gerenciadorbarbearia.exception.AtendimentosNaoEncontradosException;
@@ -42,8 +43,8 @@ public class AtendimentoService {
      * @throws AtendimentosNaoEncontradosException se o sistema não possuir nenhum atendimento cadastrado
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
-    public List<Atendimento> listarAtendimentos() {
-        List<Atendimento> lista = this.repository.listaDeAtendimento();
+    public List<AtendimentoDTO> listarAtendimentos() {
+        List<AtendimentoDTO> lista = this.repository.listaDeAtendimento();
         if (lista.isEmpty()) {
             throw new AtendimentosNaoEncontradosException("Nenhum atendimento cadastrado no sistema.");
         }

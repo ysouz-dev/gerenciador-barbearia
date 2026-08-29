@@ -8,11 +8,11 @@ import java.util.Scanner;
 public final class MenuController {
     private final Scanner scanner;
     private final AtendimentoController atendimentoController;
-    private final ClienteDiarioController clienteDiarioController;
+    private final ClienteController clienteController;
     private final EstatisticasController estatisticasController;
 
     public MenuController(Scanner scanner, AtendimentoController atendimentoController,
-                          ClienteDiarioController clienteDiarioController,
+                          ClienteController clienteController,
                           EstatisticasController estatisticasController) {
 
         if (scanner == null) {
@@ -21,7 +21,7 @@ public final class MenuController {
         if (atendimentoController == null) {
             throw new NullPointerException("O controller de atendimento não pode ser nulo.");
         }
-        if (clienteDiarioController == null) {
+        if (clienteController == null) {
             throw new NullPointerException("O controller de cliente não pode ser nulo.");
         }
         if (estatisticasController == null) {
@@ -30,7 +30,7 @@ public final class MenuController {
 
         this.scanner = scanner;
         this.atendimentoController = atendimentoController;
-        this.clienteDiarioController = clienteDiarioController;
+        this.clienteController = clienteController;
         this.estatisticasController = estatisticasController;
     }
 
@@ -74,7 +74,7 @@ public final class MenuController {
 
             switch (escolha) {
                 case 1:
-                    this.clienteDiarioController.cadastrarCliente();
+                    this.clienteController.cadastrarCliente();
                     break;
 
                 case 2:
@@ -82,7 +82,7 @@ public final class MenuController {
                     break;
 
                 case 3:
-                    this.clienteDiarioController.listarClientes();
+                    this.clienteController.listarClientes();
                     break;
 
                 case 4:
@@ -90,7 +90,7 @@ public final class MenuController {
                     break;
 
                 case 5:
-                    this.clienteDiarioController.removerCliente();
+                    this.clienteController.removerCliente();
                     break;
 
                 case 6:
