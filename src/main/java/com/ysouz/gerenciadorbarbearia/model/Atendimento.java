@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.time.LocalDateTime;
 
 /**
  * Representa um atendimento no sistema.
@@ -16,6 +17,7 @@ public class Atendimento {
     private final List<Servico> servicosRealizados;
     private BigDecimal totalServico;
     private final Pessoa cliente;
+    private final LocalDateTime data;
 
     /**
      * Cria um atendimento validando o cliente informado.
@@ -31,6 +33,7 @@ public class Atendimento {
         this.cliente = cliente;
         this.id = null;
         this.totalServico = BigDecimal.ZERO;
+        this.data = LocalDateTime.now();
     }
 
     /**
@@ -39,11 +42,12 @@ public class Atendimento {
      * @param id ID do atendimento
      * @param cliente cliente a ser atendido
      */
-    public Atendimento(Integer id, Pessoa cliente) {
+    public Atendimento(Integer id, Pessoa cliente, LocalDateTime data) {
         this.servicosRealizados = new ArrayList<>();
         this.id = id;
         this.cliente = cliente;
         this.totalServico = BigDecimal.ZERO;
+        this.data = data;
     }
 
     /**
@@ -92,6 +96,10 @@ public class Atendimento {
 
     public BigDecimal getTotal() {
         return this.totalServico;
+    }
+
+    public LocalDateTime getData() {
+        return this.data;
     }
 
     /**
