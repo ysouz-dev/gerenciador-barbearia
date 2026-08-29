@@ -111,6 +111,7 @@ public class AtendimentoController {
                     System.out.println("- " + string);
                 }
                 System.out.println("Total: R$ " + atendimento.getTotalAtendimento());
+                System.out.println("Data: " + atendimento.getData().toString().replace("T", " "));
                 Formatador.linha();
             }
         } catch (AtendimentosNaoEncontradosException e) {
