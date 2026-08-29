@@ -9,7 +9,7 @@ import com.ysouz.gerenciadorbarbearia.exception.ClienteNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.model.Atendimento;
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
 import com.ysouz.gerenciadorbarbearia.service.AtendimentoService;
-import com.ysouz.gerenciadorbarbearia.service.ClienteDiarioService;
+import com.ysouz.gerenciadorbarbearia.service.ClienteService;
 import com.ysouz.gerenciadorbarbearia.util.Formatador;
 import com.ysouz.gerenciadorbarbearia.validation.AtendimentoValidator;
 import com.ysouz.gerenciadorbarbearia.validation.PessoaValidator;
@@ -20,10 +20,10 @@ import java.util.Scanner;
 public class AtendimentoController {
     private final Scanner scanner;
     private final AtendimentoService atendimentoservice;
-    private final ClienteDiarioService clienteService;
+    private final ClienteService clienteService;
 
     public AtendimentoController(AtendimentoService atendimentoService,
-                                 ClienteDiarioService clienteService, Scanner scanner) {
+                                 ClienteService clienteService, Scanner scanner) {
         if (atendimentoService == null) throw new NullPointerException("O service de atendimento não pode ser nulo.");
         if (clienteService == null) throw new NullPointerException("O service de cliente não pode ser nulo.");
         if (scanner == null) throw new NullPointerException("O scanner de AtendimentoController não pode ser nulo.");

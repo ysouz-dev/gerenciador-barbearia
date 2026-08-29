@@ -5,7 +5,7 @@ import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
 import com.ysouz.gerenciadorbarbearia.model.Atendimento;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.*;
-import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
+import com.ysouz.gerenciadorbarbearia.model.Cliente;
 import com.ysouz.gerenciadorbarbearia.exception.AtendimentoNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.util.ConexaoUtil;
 
@@ -162,7 +162,7 @@ public class AtendimentoRepository {
                     String nome = rs.getString("nome");
                     int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
                     Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
-                    return new Atendimento(id, new ClienteDiario(nome, idade, cpf, sexo));
+                    return new Atendimento(id, new Cliente(nome, idade, cpf, sexo));
 
                 } else {
                     throw new AtendimentoNaoEncontradoException("Nenhum atendimento encontrado com esse ID");

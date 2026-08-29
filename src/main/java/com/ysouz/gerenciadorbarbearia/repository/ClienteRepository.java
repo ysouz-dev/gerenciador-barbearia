@@ -1,7 +1,7 @@
 package com.ysouz.gerenciadorbarbearia.repository;
 
-import com.ysouz.gerenciadorbarbearia.dto.ClienteDiarioDTO;
-import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
+import com.ysouz.gerenciadorbarbearia.dto.ClienteDTO;
+import com.ysouz.gerenciadorbarbearia.model.Cliente;
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
 import com.ysouz.gerenciadorbarbearia.enums.Sexo;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Repositório responsável pelos registros de Clientes do sistema.
  */
-public class ClienteDiarioRepository {
+public class ClienteRepository {
 
     /**
      * Registra o cliente informado no sistema.
@@ -122,7 +122,7 @@ public class ClienteDiarioRepository {
                     int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
                     String clienteCPF = rs.getString("cpf");
                     Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
-                    return new ClienteDiario(nome, idade, clienteCPF, sexo);
+                    return new Cliente(nome, idade, clienteCPF, sexo);
 
                 } else {
                     throw new ClienteNaoEncontradoException("Nenhum cliente encontrado com esse cpf");
@@ -162,20 +162,20 @@ public class ClienteDiarioRepository {
      * @return uma lista com todos os clientes registrados; lista vazia caso nenhum cliente registrado
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
-    public List<ClienteDiarioDTO> listaDeClientes() {
+    public List<ClienteDTO> listaDeClientes() {
         String query = "SELECT * FROM clientes";
 
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query);
             ResultSet rs = statement.executeQuery()){
 
-            List<ClienteDiarioDTO> lista = new ArrayList<>();
+            List<ClienteDTO> lista = new ArrayList<>();
             while (rs.next()) {
                 String nome = rs.getString("nome");
                 int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
                 String sexo = rs.getString("sexo");
 
-                ClienteDiarioDTO cliente = new ClienteDiarioDTO(nome, idade, sexo);
+                ClienteDTO cliente = new ClienteDTO(nome, idade, sexo);
 
                 lista.add(cliente);
             }

@@ -10,20 +10,20 @@ public class Main {
     private static MenuController createMenu() {
         Scanner scanner = new Scanner(System.in);
 
-        ClienteDiarioRepository clienteDiarioRepository = new ClienteDiarioRepository();
-        ClienteDiarioService clienteDiarioService = new ClienteDiarioService(clienteDiarioRepository);
-        ClienteDiarioController clienteDiarioController = new ClienteDiarioController(clienteDiarioService, scanner);
+        ClienteRepository clienteRepository = new ClienteRepository();
+        ClienteService clienteService = new ClienteService(clienteRepository);
+        ClienteController clienteController = new ClienteController(clienteService, scanner);
 
         AtendimentoRepository atendimentoRepository = new AtendimentoRepository();
         AtendimentoService atendimentoService = new AtendimentoService(atendimentoRepository);
         AtendimentoController atendimentoController = new AtendimentoController(atendimentoService,
-                clienteDiarioService, scanner);
+                clienteService, scanner);
 
         EstatisticasRepository estatisticasRepository = new EstatisticasRepository();
         EstatisticasService estatisticasService = new EstatisticasService(estatisticasRepository);
         EstatisticasController estatisticasController = new EstatisticasController(estatisticasService);
 
-        return new MenuController(scanner, atendimentoController, clienteDiarioController, estatisticasController);
+        return new MenuController(scanner, atendimentoController, clienteController, estatisticasController);
     }
 
     public static void main(String[] args) {

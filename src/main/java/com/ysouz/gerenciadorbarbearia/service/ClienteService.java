@@ -1,12 +1,11 @@
 package com.ysouz.gerenciadorbarbearia.service;
 
-import com.ysouz.gerenciadorbarbearia.dto.ClienteDiarioDTO;
+import com.ysouz.gerenciadorbarbearia.dto.ClienteDTO;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteJaCadastradoException;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.exception.ClientesNaoEncontradosException;
-import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
-import com.ysouz.gerenciadorbarbearia.repository.ClienteDiarioRepository;
+import com.ysouz.gerenciadorbarbearia.repository.ClienteRepository;
 import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
 
 import java.util.List;
@@ -15,10 +14,10 @@ import java.util.List;
  * Serviço responsável pelas regras de negócios relacionadas aos clientes diários
  * incluindo cadastro, busca, listagem e remoção.
  */
-public class ClienteDiarioService {
-    private final ClienteDiarioRepository repository;
+public class ClienteService {
+    private final ClienteRepository repository;
 
-    public ClienteDiarioService(ClienteDiarioRepository repository) {
+    public ClienteService(ClienteRepository repository) {
         if (repository == null) throw new NullPointerException("O repositório de cliente não pode ser nulo.");
         this.repository = repository;
     }
@@ -56,8 +55,8 @@ public class ClienteDiarioService {
      * @throws ClientesNaoEncontradosException se nenhum cliente estiver cadastrado no sistema
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
-    public List<ClienteDiarioDTO> listarClientes() {
-        List<ClienteDiarioDTO> lista = this.repository.listaDeClientes();
+    public List<ClienteDTO> listarClientes() {
+        List<ClienteDTO> lista = this.repository.listaDeClientes();
         if (lista.isEmpty()) {
             throw new ClientesNaoEncontradosException("Nenhum cliente cadastrado no sistema.");
         }

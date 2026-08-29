@@ -1,11 +1,11 @@
 package com.ysouz.gerenciadorbarbearia.dto;
 
-public class ClienteDiarioDTO {
+public class ClienteDTO {
     private final String nome;
     private final int idade;
     private final String sexo;
 
-    public ClienteDiarioDTO(String nome, int idade, String sexo) {
+    public ClienteDTO(String nome, int idade, String sexo) {
         this.nome = nome;
         this.idade = idade;
         this.sexo = sexo;
