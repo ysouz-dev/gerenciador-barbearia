@@ -1,8 +1,10 @@
 package com.ysouz.gerenciadorbarbearia.service;
 
+import com.ysouz.gerenciadorbarbearia.dto.ClienteDiarioDTO;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteJaCadastradoException;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.exception.ClientesNaoEncontradosException;
+import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
 import com.ysouz.gerenciadorbarbearia.repository.ClienteDiarioRepository;
 import com.ysouz.gerenciadorbarbearia.exception.DatabaseException;
@@ -54,8 +56,8 @@ public class ClienteDiarioService {
      * @throws ClientesNaoEncontradosException se nenhum cliente estiver cadastrado no sistema
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
-    public List<Pessoa> listarClientes() {
-        List<Pessoa> lista = this.repository.listaDeClientes();
+    public List<ClienteDiarioDTO> listarClientes() {
+        List<ClienteDiarioDTO> lista = this.repository.listaDeClientes();
         if (lista.isEmpty()) {
             throw new ClientesNaoEncontradosException("Nenhum cliente cadastrado no sistema.");
         }

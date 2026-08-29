@@ -1,5 +1,6 @@
 package com.ysouz.gerenciadorbarbearia.repository;
 
+import com.ysouz.gerenciadorbarbearia.dto.ClienteDiarioDTO;
 import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
 import com.ysouz.gerenciadorbarbearia.model.Pessoa;
 import com.ysouz.gerenciadorbarbearia.connection.Conexao;
@@ -161,22 +162,20 @@ public class ClienteDiarioRepository {
      * @return uma lista com todos os clientes registrados; lista vazia caso nenhum cliente registrado
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
-    public List<Pessoa> listaDeClientes() {
+    public List<ClienteDiarioDTO> listaDeClientes() {
         String query = "SELECT * FROM clientes";
 
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query);
             ResultSet rs = statement.executeQuery()){
 
-            List<Pessoa> lista = new ArrayList<>();
+            List<ClienteDiarioDTO> lista = new ArrayList<>();
             while (rs.next()) {
                 String nome = rs.getString("nome");
-                String cpf = rs.getString("cpf");
                 int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
-                Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
-                int totalAtendimentos = rs.getInt("total_atendimentos");
+                String sexo = rs.getString("sexo");
 
-                ClienteDiario cliente = new ClienteDiario(nome, idade, cpf, sexo, totalAtendimentos);
+                ClienteDiarioDTO cliente = new ClienteDiarioDTO(nome, idade, sexo);
 
                 lista.add(cliente);
             }

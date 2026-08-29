@@ -1,11 +1,11 @@
 package com.ysouz.gerenciadorbarbearia.controller;
 
+import com.ysouz.gerenciadorbarbearia.dto.ClienteDiarioDTO;
 import com.ysouz.gerenciadorbarbearia.enums.Sexo;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteJaCadastradoException;
 import com.ysouz.gerenciadorbarbearia.exception.ClienteNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.exception.ClientesNaoEncontradosException;
 import com.ysouz.gerenciadorbarbearia.model.ClienteDiario;
-import com.ysouz.gerenciadorbarbearia.model.Pessoa;
 import com.ysouz.gerenciadorbarbearia.service.ClienteDiarioService;
 import com.ysouz.gerenciadorbarbearia.util.Formatador;
 import com.ysouz.gerenciadorbarbearia.validation.PessoaValidator;
@@ -88,9 +88,14 @@ public class ClienteDiarioController {
 
     public void listarClientes() {
         try {
-            for (Pessoa cliente : this.service.listarClientes()) {
-                System.out.println(cliente.resumo());
+            int contador = 1;
+            for (ClienteDiarioDTO cliente : this.service.listarClientes()) {
+                System.out.println("N.º: " + contador);
+                System.out.println("Nome: " + cliente.getNome());
+                System.out.println("Idade: " + cliente.getIdade());
+                System.out.println("Sexo: " + cliente.getSexo());
                 Formatador.linha();
+                contador++;
             }
         } catch (ClientesNaoEncontradosException e) {
             System.out.println(e.getMessage());
