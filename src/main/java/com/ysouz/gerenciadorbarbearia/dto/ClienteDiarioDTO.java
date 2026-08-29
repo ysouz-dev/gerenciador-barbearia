@@ -12,7 +12,7 @@ public class ClienteDiarioDTO {
     }
 
     public String getNome() {
-        return nome;
+        return this.nome;
     }
 
     public int getIdade() {
@@ -20,6 +20,6 @@ public class ClienteDiarioDTO {
     }
 
     public String getSexo() {
-        return sexo;
+        return this.sexo;
     }
 }
