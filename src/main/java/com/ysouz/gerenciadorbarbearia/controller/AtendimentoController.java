@@ -1,5 +1,6 @@
 package com.ysouz.gerenciadorbarbearia.controller;
 
+import com.ysouz.gerenciadorbarbearia.dto.AtendimentoDTO;
 import com.ysouz.gerenciadorbarbearia.enums.Servico;
 import com.ysouz.gerenciadorbarbearia.exception.AtendimentoNaoEncontradoException;
 import com.ysouz.gerenciadorbarbearia.exception.AtendimentoSemServicoException;
@@ -102,8 +103,14 @@ public class AtendimentoController {
 
     public void listarAtendimentos() {
         try {
-            for (Atendimento atendimento : this.atendimentoservice.listarAtendimentos()) {
-                System.out.println(atendimento.resumo());
+            for (AtendimentoDTO atendimento : this.atendimentoservice.listarAtendimentos()) {
+                System.out.println("ID: " + atendimento.getId());
+                System.out.println("Nome: " + atendimento.getNome());
+                System.out.println("Serviços: ");
+                for (String string : atendimento.getServicos()) {
+                    System.out.println("- " + string);
+                }
+                System.out.println("Total: R$ " + atendimento.getTotalAtendimento());
                 Formatador.linha();
             }
         } catch (AtendimentosNaoEncontradosException e) {
