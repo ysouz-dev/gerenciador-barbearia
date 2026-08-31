@@ -34,18 +34,6 @@ public abstract class Pessoa {
         this.sexo = sexo;
     }
 
-    /**
-     * Retorna uma ‘string’ com um resumo da pessoa.
-     *
-     * @return uma ‘string’ com os dados da pessoa
-     */
-    public String resumo() {
-        return "Nome: " + this.nome +
-                "\nIdade: " + this.idade +
-                "\nCPF: " + this.cpf +
-                "\nSexo: " + this.sexo.getNomeSexo();
-    }
-
     public String getNome() {
         return this.nome;
     }

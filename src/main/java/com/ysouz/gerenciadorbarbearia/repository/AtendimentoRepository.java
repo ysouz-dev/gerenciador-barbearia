@@ -27,9 +27,7 @@ import java.util.ArrayList;
 public class AtendimentoRepository {
 
     /**
-     * Registra um novo atendimento no sistema, vinculando o cliente
-     * a uma lista de serviços realizados. Também incrementa 1 ao total de atendimentos
-     * do cliente vinculado ao atendimento.
+     * Registra um novo atendimento no sistema, vinculando o cliente a uma lista de serviços realizados.
      *
      * @param atendimento atendimento a ser registrado
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados ou ao realizar rollback,
@@ -38,23 +36,17 @@ public class AtendimentoRepository {
     public void salvar(Atendimento atendimento) {
         String query = "INSERT INTO atendimentos(cliente_cpf, valor, data) VALUES (?, ?, ?) ";
 
-        String queryTotalAtendimento = "UPDATE clientes SET total_atendimentos = total_atendimentos + 1 WHERE cpf = ?";
-
         Connection conexao = null;
         try {
             conexao = Conexao.getConexao();
             conexao.setAutoCommit(false);
 
-            try (PreparedStatement statement = conexao.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-                 PreparedStatement statementTotalAtendimento = conexao.prepareStatement(queryTotalAtendimento)) {
+            try (PreparedStatement statement = conexao.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
                 statement.setString(1, atendimento.getPessoa().getCPF());
                 statement.setBigDecimal(2, atendimento.getTotal());
                 statement.setObject(3, atendimento.getData());
                 statement.executeUpdate();
-
-                statementTotalAtendimento.setString(1, atendimento.getPessoa().getCPF());
-                statementTotalAtendimento.executeUpdate();
 
                 try (ResultSet rs = statement.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -90,8 +82,7 @@ public class AtendimentoRepository {
     /**
      * Remove do sistema o atendimento referente ao ID informado.
      * <p>
-     * Também remove os registros das relações entre o atendimento e o serviço realizado
-     * e decrementa do total de atendimentos do cliente vinculado ao atendimento.
+     * Também remove os registros das relações entre o atendimento e o serviço realizado.
      *
      * @param id ID do atendimento a ser removido
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados ou ao realizar rollback,
@@ -102,20 +93,12 @@ public class AtendimentoRepository {
 
         String query2 = "DELETE FROM atendimentos_servicos WHERE id_atendimento = ?";
 
-        String query3 = "UPDATE clientes " +
-                        "SET total_atendimentos = total_atendimentos - 1 " +
-                        "WHERE cpf = (SELECT cliente_cpf from atendimentos WHERE id = ?)";
-
         Connection conexao = null;
         try {
             conexao = Conexao.getConexao();
             conexao.setAutoCommit(false);
             try (PreparedStatement statement = conexao.prepareStatement(query);
-                 PreparedStatement statement2 = conexao.prepareStatement(query2);
-                 PreparedStatement statement3 = conexao.prepareStatement(query3)) {
-
-                statement3.setInt(1, id);
-                statement3.executeUpdate();
+                 PreparedStatement statement2 = conexao.prepareStatement(query2)) {
 
                 statement2.setInt(1, id);
                 statement2.executeUpdate();

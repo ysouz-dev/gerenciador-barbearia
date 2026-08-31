@@ -94,6 +94,7 @@ public class ClienteController {
                 System.out.println("Nome: " + cliente.getNome());
                 System.out.println("Idade: " + cliente.getIdade());
                 System.out.println("Sexo: " + cliente.getSexo());
+                System.out.println("Total de atendimentos: " + cliente.getTotalAtendimentos());
                 Formatador.linha();
                 contador++;
             }
