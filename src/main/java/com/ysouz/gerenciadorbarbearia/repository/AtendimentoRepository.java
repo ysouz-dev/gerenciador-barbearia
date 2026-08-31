@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -36,7 +36,7 @@ public class AtendimentoRepository {
      * ou ao tentar fechar conexão com o banco de dados
      */
     public void salvar(Atendimento atendimento) {
-        String query = "INSERT INTO atendimentos(cliente_cpf, valor) VALUES (?, ?) ";
+        String query = "INSERT INTO atendimentos(cliente_cpf, valor, data) VALUES (?, ?, ?) ";
 
         String queryTotalAtendimento = "UPDATE clientes SET total_atendimentos = total_atendimentos + 1 WHERE cpf = ?";
 
@@ -50,6 +50,7 @@ public class AtendimentoRepository {
 
                 statement.setString(1, atendimento.getPessoa().getCPF());
                 statement.setBigDecimal(2, atendimento.getTotal());
+                statement.setObject(3, atendimento.getData());
                 statement.executeUpdate();
 
                 statementTotalAtendimento.setString(1, atendimento.getPessoa().getCPF());
@@ -146,7 +147,7 @@ public class AtendimentoRepository {
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
     public Atendimento buscaPorId(Integer id) {
-        String query = "SELECT cl.* FROM atendimentos as ate " +
+        String query = "SELECT cl.*, ate.data FROM atendimentos as ate " +
                     "JOIN clientes as cl " +
                     "ON cl.cpf = ate.cliente_cpf " +
                     "WHERE ate.id = ?";
@@ -160,9 +161,10 @@ public class AtendimentoRepository {
                 if (rs.next()) {
                     String cpf = rs.getString("cpf");
                     String nome = rs.getString("nome");
-                    int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
+                    int idade = LocalDateTime.now().getYear() - rs.getInt("nascimento");
                     Sexo sexo = Sexo.toSexo(rs.getString("sexo"));
-                    return new Atendimento(id, new Cliente(nome, idade, cpf, sexo));
+                    LocalDateTime data = rs.getObject("data", LocalDateTime.class);
+                    return new Atendimento(id, new Cliente(nome, idade, cpf, sexo), data);
 
                 } else {
                     throw new AtendimentoNaoEncontradoException("Nenhum atendimento encontrado com esse ID");
@@ -207,7 +209,8 @@ public class AtendimentoRepository {
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
     public List<AtendimentoDTO> listaDeAtendimento() {
-        String query = "SELECT ate.id, cl.nome, sv.nome as servico, ate.valor FROM atendimentos_servicos as ates " +
+        String query = "SELECT ate.id, cl.nome, sv.nome as servico, ate.valor, ate.data " +
+                        "FROM atendimentos_servicos as ates " +
                         "JOIN atendimentos as ate " +
                         "ON ate.id = ates.id_atendimento " +
                         "JOIN servicos as sv " +
@@ -227,8 +230,9 @@ public class AtendimentoRepository {
                     String nome = rs.getString("nome");
                     List<String> servico = new ArrayList<>();
                     BigDecimal total = rs.getBigDecimal("valor");
+                    LocalDateTime data = rs.getObject("data", LocalDateTime.class);
 
-                    AtendimentoDTO atendimento = new AtendimentoDTO(id, nome, servico, total);
+                    AtendimentoDTO atendimento = new AtendimentoDTO(id, nome, servico, total, data);
                     lista.put(id, atendimento);
                 }
                 lista.get(id).getServicos().add(rs.getString("servico"));

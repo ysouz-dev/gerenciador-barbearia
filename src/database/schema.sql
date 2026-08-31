@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS atendimentos (
     id INT AUTO_INCREMENT NOT NULL,
     cliente_cpf VARCHAR(11) NOT NULL,
     valor DECIMAL(5, 2) NOT NULL,
+    data DATETIME,
     PRIMARY KEY(id),
     FOREIGN KEY(cliente_cpf) REFERENCES clientes(cpf)
 ) DEFAULT CHARSET = utf8mb4;
