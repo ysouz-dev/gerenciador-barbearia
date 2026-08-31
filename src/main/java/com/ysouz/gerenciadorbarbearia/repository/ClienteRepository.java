@@ -29,7 +29,7 @@ public class ClienteRepository {
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
     public void salvar(Pessoa pessoa) {
-        String query = "INSERT INTO clientes VALUES (?, ?, year(now()) - ?, ?, default)";
+        String query = "INSERT INTO clientes VALUES (?, ?, year(now()) - ?, ?)";
 
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query)) {
