@@ -158,12 +158,18 @@ public class ClienteRepository {
 
     /**
      * Lista todos os clientes registrados no sistema.
+     * <p>
+     * A consulta utiliza JOIN e GROUP BY para trazer a quantidade de atendimentos
+     * realizados pelo cliente em uma query unica, evitando múltiplas consultas ao banco.
      *
      * @return uma lista com todos os clientes registrados; lista vazia caso nenhum cliente registrado
      * @throws DatabaseException se ocorrer um erro ao acessar o banco de dados
      */
     public List<ClienteDTO> listaDeClientes() {
-        String query = "SELECT * FROM clientes";
+        String query = "SELECT cl.nome, cl.nascimento, cl.sexo, count(cl.cpf) as total FROM clientes as cl " +
+                        "JOIN atendimentos as ate " +
+                        "ON cl.cpf = ate.cliente_cpf " +
+                        "GROUP BY cl.cpf";
 
         try (Connection conexao = Conexao.getConexao();
             PreparedStatement statement = conexao.prepareStatement(query);
@@ -174,8 +180,9 @@ public class ClienteRepository {
                 String nome = rs.getString("nome");
                 int idade = LocalDate.now().getYear() - rs.getInt("nascimento");
                 String sexo = rs.getString("sexo");
+                int total = rs.getInt("total");
 
-                ClienteDTO cliente = new ClienteDTO(nome, idade, sexo);
+                ClienteDTO cliente = new ClienteDTO(nome, idade, sexo, total);
 
                 lista.add(cliente);
             }
