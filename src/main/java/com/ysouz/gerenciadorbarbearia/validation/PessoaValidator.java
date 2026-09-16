@@ -1,6 +1,6 @@
-package com.ysouz.gerenciadorbarbearia.util;
+package com.ysouz.gerenciadorbarbearia.validation;
 
-public abstract class Validador {
+public final class PessoaValidator {
 
     public static void validaCPF(String cpf) {
         if (cpf == null || cpf.isBlank() || cpf.strip().length() != 11) {
@@ -30,15 +30,6 @@ public abstract class Validador {
             if (!Character.isLetter(nomeSemEspaco.charAt(i))) {
                 throw new IllegalArgumentException("Nome inválido!");
             }
-        }
-    }
-
-    public static void validaId(Integer id) {
-        if (id == null) {
-            throw new IllegalArgumentException("O ID não pode ser nulo");
-        }
-        if (id < 1) {
-            throw new IllegalArgumentException("O ID não pode ser menor ou igual a ZERO");
         }
     }
 }

@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS clientes (
     nome VARCHAR(50) NOT NULL,
     nascimento YEAR NOT NULL,
     sexo ENUM('MASCULINO', 'FEMININO', 'NÃO INFORMADO'),
-    total_atendimentos int UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (cpf)
 ) DEFAULT CHARSET = utf8mb4;
 
@@ -17,6 +16,7 @@ CREATE TABLE IF NOT EXISTS atendimentos (
     id INT AUTO_INCREMENT NOT NULL,
     cliente_cpf VARCHAR(11) NOT NULL,
     valor DECIMAL(5, 2) NOT NULL,
+    data DATETIME,
     PRIMARY KEY(id),
     FOREIGN KEY(cliente_cpf) REFERENCES clientes(cpf)
 ) DEFAULT CHARSET = utf8mb4;

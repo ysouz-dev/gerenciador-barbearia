@@ -1,14 +1,15 @@
 package com.ysouz.gerenciadorbarbearia.enums;
 
-import java.util.Objects;
-
+/**
+ * Representa o sexo do cliente no sistema.
+ */
 public enum Sexo {
     MASCULINO("MASCULINO", "M"),
     FEMININO("FEMININO", "F"),
     NAO_INFORMADO("NÃO INFORMADO", "N");
 
-    private String nome;
-    private String sigla;
+    private final String nome;
+    private final String sigla;
 
     Sexo(String nome, String sigla) {
         this.nome = nome;
@@ -20,6 +21,13 @@ public enum Sexo {
         return this.nome;
     }
 
+    /**
+     * Converte a sigla (M/F/N) ou o nome (MASCULINO, FEMININO, NÃO INFORMADO) para o sexo correspondente.
+     *
+     * @param sexo sigla ou nome do sexo
+     * @return o sexo correspondente a sigla ou nome informado
+     * @throws IllegalArgumentException se a sigla ou o nome não corresponder a nenhum sexo válido
+     */
     public static Sexo toSexo(String sexo) {
         for (Sexo sex : Sexo.values()) {
             if (sexo.strip().equalsIgnoreCase(sex.nome) || sexo.strip().equalsIgnoreCase(sex.sigla)) {
@@ -27,11 +35,5 @@ public enum Sexo {
             }
         }
         throw new IllegalArgumentException("Sexo inválido!");
-    }
-
-    public static void isSexo(Sexo sexo) {
-        if (Objects.isNull(sexo)) {
-            throw new IllegalArgumentException("Sexo inválido!");
-        }
     }
 }
